@@ -10,7 +10,7 @@ namespace Proxy
         static void Main(string[] args)
         {
 
-            string filePath = @"C:\Users\VINGA\Desktop\КПЗ\Lab3\Lab3\file04.txt";
+            string filePath = @"C:\Users\VINGA\Desktop\КПЗ\Lab3\file04.txt";
 
             File.WriteAllText(filePath, "WriteAllText");
 
