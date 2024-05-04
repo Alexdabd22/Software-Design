@@ -1,5 +1,4 @@
 ﻿
-
 namespace ChainOfResponsibilityLibrary
 {
     public class UserRequest
