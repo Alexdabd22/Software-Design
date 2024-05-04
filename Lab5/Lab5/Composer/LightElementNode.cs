@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using State;
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace Composer
 {
-    public class LightElementNode : LightNode, IEnumerable<LightNode>
+    public class LightElementNode : State.LightNode, IEnumerable<LightNode>
     {
         public LightElementFlyweight Flyweight { get; }
         public bool IsSelfClosing { get; }
@@ -30,7 +31,6 @@ namespace Composer
             Children.Add(child);
         }
 
-        // Додавання CSS-класу
         public void AddClass(string cssClass)
         {
             if (!string.IsNullOrWhiteSpace(cssClass) && !cssClasses.Contains(cssClass))
@@ -39,7 +39,6 @@ namespace Composer
             }
         }
 
-        // Видалення CSS-класу
         public void RemoveClass(string cssClass)
         {
             cssClasses.Remove(cssClass);

@@ -4,16 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CDCABA9E-FD61-4709-9A01-690CBD04A990}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Composer</RootNamespace>
-    <AssemblyName>Composer</AssemblyName>
+    <ProjectGuid>{3D0F36AE-9B76-471D-891F-25D5C838A12A}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>ConsoleState</RootNamespace>
+    <AssemblyName>ConsoleState</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -41,14 +43,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LightElementFlyweight .cs" />
-    <Compile Include="LightElementNode.cs" />
-    <Compile Include="LightNode.cs" />
-    <Compile Include="LightNodeIterator.cs" />
-    <Compile Include="LightTextNode.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Composer\Composer.csproj">
+      <Project>{cdcaba9e-fd61-4709-9a01-690cbd04a990}</Project>
+      <Name>Composer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\State\State.csproj">
       <Project>{027c83f4-4b1e-49cc-a8ab-1a5b98e70118}</Project>
       <Name>State</Name>
