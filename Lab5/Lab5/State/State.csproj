@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CDCABA9E-FD61-4709-9A01-690CBD04A990}</ProjectGuid>
+    <ProjectGuid>{027C83F4-4B1E-49CC-A8AB-1A5B98E70118}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Composer</RootNamespace>
-    <AssemblyName>Composer</AssemblyName>
+    <RootNamespace>State</RootNamespace>
+    <AssemblyName>State</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -41,18 +41,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LightElementFlyweight .cs" />
-    <Compile Include="LightElementNode.cs" />
-    <Compile Include="LightNode.cs" />
-    <Compile Include="LightNodeIterator.cs" />
-    <Compile Include="LightTextNode.cs" />
+    <Compile Include="HiddenState.cs" />
+    <Compile Include="ILightNodeState.cs" />
+    <Compile Include="lightNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\State\State.csproj">
-      <Project>{027c83f4-4b1e-49cc-a8ab-1a5b98e70118}</Project>
-      <Name>State</Name>
-    </ProjectReference>
+    <Compile Include="SelectedState.cs" />
+    <Compile Include="VisibleState.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

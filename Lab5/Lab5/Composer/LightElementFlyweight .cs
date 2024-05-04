@@ -11,7 +11,7 @@ namespace Composer
         public string TagName { get; }
         public string DisplayType { get; }
 
-        public LightElementFlyweight(string tagName, string displayType)
+        public LightElementFlyweight(string tagName, string displayType = "block")
         {
             TagName = tagName;
             DisplayType = displayType;
