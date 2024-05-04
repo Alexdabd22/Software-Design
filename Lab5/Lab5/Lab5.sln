@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "State", "State\State.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleState", "ConsoleState\ConsoleState.csproj", "{3D0F36AE-9B76-471D-891F-25D5C838A12A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HtmlTemplateLibrary", "HtmlTemplateLibrary\HtmlTemplateLibrary.csproj", "{7EBD49C4-F539-470E-AF95-A73B4A4B2886}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleHtmlTemplate", "ConsoleHtmlTemplate\ConsoleHtmlTemplate.csproj", "{B8A62783-3FDC-49FA-9EDF-9522DB2902AD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +49,14 @@ Global
 		{3D0F36AE-9B76-471D-891F-25D5C838A12A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D0F36AE-9B76-471D-891F-25D5C838A12A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D0F36AE-9B76-471D-891F-25D5C838A12A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7EBD49C4-F539-470E-AF95-A73B4A4B2886}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EBD49C4-F539-470E-AF95-A73B4A4B2886}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EBD49C4-F539-470E-AF95-A73B4A4B2886}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EBD49C4-F539-470E-AF95-A73B4A4B2886}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8A62783-3FDC-49FA-9EDF-9522DB2902AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8A62783-3FDC-49FA-9EDF-9522DB2902AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8A62783-3FDC-49FA-9EDF-9522DB2902AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8A62783-3FDC-49FA-9EDF-9522DB2902AD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
