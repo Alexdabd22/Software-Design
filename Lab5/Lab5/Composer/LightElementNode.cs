@@ -30,12 +30,19 @@ namespace Composer
             Children.Add(child);
         }
 
+        // Додавання CSS-класу
         public void AddClass(string cssClass)
         {
             if (!string.IsNullOrWhiteSpace(cssClass) && !cssClasses.Contains(cssClass))
             {
                 cssClasses.Add(cssClass);
             }
+        }
+
+        // Видалення CSS-класу
+        public void RemoveClass(string cssClass)
+        {
+            cssClasses.Remove(cssClass);
         }
 
         public override string OuterHtml(int indentLevel = 0)
