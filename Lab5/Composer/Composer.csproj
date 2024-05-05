@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HtmlStructureVisitor.cs" />
     <Compile Include="LightElementFlyweight .cs" />
     <Compile Include="LightElementNode.cs" />
     <Compile Include="LightNodeIterator.cs" />
