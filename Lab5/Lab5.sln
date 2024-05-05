@@ -21,6 +21,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TemplateMethod", "TemplateM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleTemplateMethod", "ConsoleTemplateMethod\ConsoleTemplateMethod.csproj", "{ACDD6423-4D22-402A-A9CE-B33542B95C3E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Visitor", "Visitor\Visitor.csproj", "{B5372A9D-B5CA-47B2-982F-29BEDFE25358}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleVisitor", "ConsoleVisitor\ConsoleVisitor.csproj", "{D3570A8E-A2E8-462A-B6A1-2DC8B039B9C5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +67,14 @@ Global
 		{ACDD6423-4D22-402A-A9CE-B33542B95C3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ACDD6423-4D22-402A-A9CE-B33542B95C3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ACDD6423-4D22-402A-A9CE-B33542B95C3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5372A9D-B5CA-47B2-982F-29BEDFE25358}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5372A9D-B5CA-47B2-982F-29BEDFE25358}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5372A9D-B5CA-47B2-982F-29BEDFE25358}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5372A9D-B5CA-47B2-982F-29BEDFE25358}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3570A8E-A2E8-462A-B6A1-2DC8B039B9C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3570A8E-A2E8-462A-B6A1-2DC8B039B9C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3570A8E-A2E8-462A-B6A1-2DC8B039B9C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3570A8E-A2E8-462A-B6A1-2DC8B039B9C5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

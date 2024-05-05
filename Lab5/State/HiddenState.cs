@@ -9,7 +9,7 @@ namespace State
         public void Show(LightNode node)
         {
             Console.WriteLine($"{node.GetType().Name} показано.");
-            node.State = new VisibleState();
+            node.State = new VisibleState(); 
         }
 
         public void Hide(LightNode node)
