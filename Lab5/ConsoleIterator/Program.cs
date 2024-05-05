@@ -1,5 +1,6 @@
 ﻿using System;
 using Composer;
+using CommonLibrary;
 
 namespace ConsoleIterator
 {

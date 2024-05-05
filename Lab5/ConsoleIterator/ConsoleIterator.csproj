@@ -50,6 +50,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CommonLibrary\CommonLibrary.csproj">
+      <Project>{266a360a-c948-403f-8801-7299810474e8}</Project>
+      <Name>CommonLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Composer\Composer.csproj">
       <Project>{160f7443-a446-4a77-8afd-ba8320a846d8}</Project>
       <Name>Composer</Name>

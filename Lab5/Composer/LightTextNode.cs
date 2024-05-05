@@ -4,11 +4,16 @@ namespace Composer
 {
     public class LightTextNode : LightNode
     {
-        public string Text { get; }
+        public string Text { get; private set; }
 
         public LightTextNode(string text)
         {
             Text = text;
+        }
+
+        public void SetText(string newText)
+        {
+            Text = newText;
         }
 
         public override void Accept(ILightNodeVisitor visitor)

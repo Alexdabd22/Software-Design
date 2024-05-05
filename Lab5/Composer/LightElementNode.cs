@@ -100,7 +100,15 @@ namespace Composer
             }
             return sb.ToString();
         }
+        public void Hide()
+        {
+            NodeState.Hide(this);
+        }
 
+        public void Show()
+        {
+            NodeState.Show(this);
+        }
         public IEnumerator<LightNode> GetEnumerator()
         {
             return Children.GetEnumerator();
