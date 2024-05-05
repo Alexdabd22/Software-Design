@@ -2,7 +2,7 @@
 {
     public class LightTextNode : LightNode
     {
-        public string Text { get; }
+        public string Text { get; private set; }
 
         public LightTextNode(string text)
         {
@@ -13,6 +13,11 @@
         {
             string indent = new string(' ', indentLevel * 4);
             return $"{indent}{Text}\n";
+        }
+
+        public void SetText(string newText)
+        {
+            Text = newText;
         }
     }
 }
