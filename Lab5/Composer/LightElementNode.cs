@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using CommonLibrary;
+using State;
 
 namespace Composer
 {
@@ -20,13 +21,15 @@ namespace Composer
             IsSelfClosing = isSelfClosing;
             this.cssClasses = new List<string>(cssClasses ?? Enumerable.Empty<string>());
             Children = new List<LightNode>(children ?? Enumerable.Empty<LightNode>());
+
+            State = new VisibleState(); 
         }
 
         public void AddChild(LightNode child)
         {
             if (IsSelfClosing)
             {
-                throw new InvalidOperationException($"{Flyweight.TagName} is a self-closing tag and cannot contain children.");
+                throw new InvalidOperationException($"{Flyweight.TagName} є самозакриваючимся тегом і не може містити дочірніх елементів.");
             }
             Children.Add(child);
         }
@@ -46,6 +49,7 @@ namespace Composer
             cssClasses.Remove(cssClass);
         }
 
+        // Виведення зовнішнього HTML
         public override string OuterHtml(int indentLevel = 0)
         {
             var sb = new StringBuilder();

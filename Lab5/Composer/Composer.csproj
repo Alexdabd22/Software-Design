@@ -43,10 +43,19 @@
   <ItemGroup>
     <Compile Include="LightElementFlyweight .cs" />
     <Compile Include="LightElementNode.cs" />
-    <Compile Include="LightNode.cs" />
     <Compile Include="LightNodeIterator.cs" />
     <Compile Include="LightTextNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CommonLibrary\CommonLibrary.csproj">
+      <Project>{266a360a-c948-403f-8801-7299810474e8}</Project>
+      <Name>CommonLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\State\State.csproj">
+      <Project>{018aee8d-23ea-4e2b-b2d1-92308f7112c1}</Project>
+      <Name>State</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

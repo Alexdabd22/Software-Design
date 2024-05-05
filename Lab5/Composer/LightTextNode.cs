@@ -1,4 +1,6 @@
-﻿namespace Composer
+﻿using CommonLibrary;
+namespace Composer
+
 {
     public class LightTextNode : LightNode
     {
