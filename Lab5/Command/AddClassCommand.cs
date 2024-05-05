@@ -1,6 +1,7 @@
 ﻿using System;
 using Composer;
 
+
 namespace Command
 {
     public class AddClassCommand : ICommand
