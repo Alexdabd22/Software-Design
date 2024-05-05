@@ -17,6 +17,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonLibrary", "CommonLibr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleState", "ConsoleState\ConsoleState.csproj", "{6B68F510-8B07-4545-B549-81FE03699C80}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TemplateMethod", "TemplateMethod\TemplateMethod.csproj", "{F7BBF374-5067-4CB6-8A7A-622B049AB49D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleTemplateMethod", "ConsoleTemplateMethod\ConsoleTemplateMethod.csproj", "{ACDD6423-4D22-402A-A9CE-B33542B95C3E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +55,14 @@ Global
 		{6B68F510-8B07-4545-B549-81FE03699C80}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B68F510-8B07-4545-B549-81FE03699C80}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6B68F510-8B07-4545-B549-81FE03699C80}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7BBF374-5067-4CB6-8A7A-622B049AB49D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7BBF374-5067-4CB6-8A7A-622B049AB49D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7BBF374-5067-4CB6-8A7A-622B049AB49D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7BBF374-5067-4CB6-8A7A-622B049AB49D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACDD6423-4D22-402A-A9CE-B33542B95C3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACDD6423-4D22-402A-A9CE-B33542B95C3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACDD6423-4D22-402A-A9CE-B33542B95C3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACDD6423-4D22-402A-A9CE-B33542B95C3E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
