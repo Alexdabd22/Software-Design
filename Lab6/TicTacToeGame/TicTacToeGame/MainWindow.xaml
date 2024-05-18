@@ -5,17 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TicTacToeGame"
         mc:Ignorable="d"
-        Title="Tic Tac Toe Game" Height="350" Width="525">
-    <Grid Name="MainGrid">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="1*"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="1*"/>
-        </Grid.ColumnDefinitions>
-    </Grid>
+        Title="Tic Tac Toe Menu" Height="350" Width="525">
+    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Button Content="Play With AI" Click="PlayWithAI_Click"/>
+        <Button Content="Play With Friend" Click="PlayWithFriend_Click" Height="23"/>
+    </StackPanel>
 </Window>
