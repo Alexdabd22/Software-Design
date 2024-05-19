@@ -122,7 +122,7 @@ namespace TicTacToeGame
             if (!string.IsNullOrEmpty(gameViewModel.Username))
             {
                 player1ID = dbManager.GetPlayerID(gameViewModel.Username);
-                player2ID = gameViewModel.PlayWithAI ? 0 : 2; // Використання 2 як ID другого гравця у випадку гри проти іншого користувача.
+                player2ID = gameViewModel.PlayWithAI ? 0 : 2; 
             }
 
             int winnerID = winner == 0 ? 0 : (winner == 1 ? player1ID : player2ID);
