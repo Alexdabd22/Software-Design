@@ -9,19 +9,29 @@ namespace TicTacToeGame
     {
         private GameViewModel gameViewModel;
 
-        public GameWindow(bool playWithAI, string username)
+        public GameWindow(bool playWithAI, string username, int boardSize)
         {
             InitializeComponent();
-            gameViewModel = new GameViewModel { PlayWithAI = playWithAI, Username = username };
+            gameViewModel = new GameViewModel(boardSize) { PlayWithAI = playWithAI, Username = username };
             DataContext = gameViewModel;
             InitializeGame();
         }
 
         private void InitializeGame()
         {
-            for (int i = 0; i < 3; i++)
+            MainGrid.Children.Clear();
+            MainGrid.RowDefinitions.Clear();
+            MainGrid.ColumnDefinitions.Clear();
+
+            for (int i = 0; i < gameViewModel.BoardSize; i++)
             {
-                for (int j = 0; j < 3; j++)
+                MainGrid.RowDefinitions.Add(new RowDefinition());
+                MainGrid.ColumnDefinitions.Add(new ColumnDefinition());
+            }
+
+            for (int i = 0; i < gameViewModel.BoardSize; i++)
+            {
+                for (int j = 0; j < gameViewModel.BoardSize; j++)
                 {
                     Button button = new Button
                     {
@@ -42,42 +52,29 @@ namespace TicTacToeGame
             if (button == null || button.Content.ToString() != string.Empty)
                 return;
 
-            // Check if it's player vs player
-            if (!gameViewModel.PlayWithAI)
+            if (!gameViewModel.PlayWithAI || gameViewModel.CurrentPlayer == 1)
             {
-                // Alternate turns between X and O
                 button.Content = gameViewModel.CurrentPlayer == 1 ? "X" : "O";
                 gameViewModel.MakeMove(Grid.GetRow(button), Grid.GetColumn(button));
                 CheckGameState();
             }
-            else
-            {
-                // If it's player vs AI, ensure only player can place "X"
-                if (gameViewModel.CurrentPlayer == 1)
-                {
-                    button.Content = "X";
-                    gameViewModel.MakeMove(Grid.GetRow(button), Grid.GetColumn(button));
-                    CheckGameState();
 
-                    // Perform AI move if AI mode is active and it's AI's turn
-                    if (!gameViewModel.CheckForWinner() && !gameViewModel.IsDraw() && gameViewModel.CurrentPlayer == 2)
-                    {
-                        Dispatcher.InvokeAsync(() =>
-                        {
-                            gameViewModel.PerformAiMove();  // AI makes its move
-                            UpdateUiForAiMove();  // Update the UI after AI move
-                            CheckGameState();  // Check game state after AI move
-                        });
-                    }
-                }
+            if (gameViewModel.PlayWithAI && gameViewModel.CurrentPlayer == 2)
+            {
+                Dispatcher.InvokeAsync(() =>
+                {
+                    gameViewModel.PerformAiMove();
+                    UpdateUiForAiMove();
+                    CheckGameState();
+                });
             }
         }
 
         private void UpdateUiForAiMove()
         {
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < gameViewModel.BoardSize; i++)
             {
-                for (int j = 0; j < 3; j++)
+                for (int j = 0; j < gameViewModel.BoardSize; j++)
                 {
                     var button = MainGrid.Children
                         .Cast<Button>()
@@ -115,3 +112,7 @@ namespace TicTacToeGame
         }
     }
 }
+
+
+
+

@@ -8,6 +8,11 @@
         Title="Tic Tac Toe Menu" Height="350" Width="525">
     <Grid>
         <StackPanel VerticalAlignment="Center">
+            <ComboBox x:Name="BoardSizeComboBox" Width="150" Margin="10">
+                <ComboBoxItem Content="3x3" IsSelected="True"/>
+                <ComboBoxItem Content="4x4"/>
+                <ComboBoxItem Content="5x5"/>
+            </ComboBox>
             <Button Content="Play With AI" Click="PlayWithAI_Click" Margin="10"/>
             <Button Content="Play With Friend" Click="PlayWithFriend_Click" Margin="10"/>
             <Button Content="Register" Click="RegisterButton_Click" Margin="10"/>
@@ -16,4 +21,5 @@
         </StackPanel>
     </Grid>
 </Window>
+
 
