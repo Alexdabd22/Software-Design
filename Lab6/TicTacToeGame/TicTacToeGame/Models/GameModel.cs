@@ -1,75 +1,66 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace TicTacToeGame.Models
 {
     public class GameModel
     {
-        private static Random random = new Random();
-        public int[,] Board { get; private set; } = new int[3, 3]; // 0 - empty, 1 - X, 2 - O
+        public int[,] Board { get; private set; }
+        public int BoardSize { get; private set; }
+
+        public GameModel(int boardSize)
+        {
+            BoardSize = boardSize;
+            Board = new int[BoardSize, BoardSize];
+        }
 
         public void MakeMove(int x, int y, int player)
         {
-            if (player < 1 || player > 2)
-            {
-                throw new ArgumentException("Player must be 1 (X) or 2 (O).");
-            }
-            if (x < 0 || x > 2 || y < 0 || y > 2)
-            {
-                throw new ArgumentException("Invalid board position.");
-            }
+            if (x < 0 || x >= BoardSize || y < 0 || y >= BoardSize)
+                throw new ArgumentOutOfRangeException("Move is out of board bounds.");
+
             if (Board[x, y] == 0)
             {
                 Board[x, y] = player;
-            }
-            else
-            {
-                throw new InvalidOperationException("This position is already taken.");
             }
         }
 
         public bool CheckForWinner()
         {
             // Check rows and columns
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < BoardSize; i++)
             {
-                if ((Board[i, 0] == Board[i, 1] && Board[i, 1] == Board[i, 2] && Board[i, 0] != 0) ||
-                    (Board[0, i] == Board[1, i] && Board[1, i] == Board[2, i] && Board[0, i] != 0))
+                if (Enumerable.Range(0, BoardSize).All(j => Board[i, j] == Board[i, 0] && Board[i, 0] != 0) ||
+                    Enumerable.Range(0, BoardSize).All(j => Board[j, i] == Board[0, i] && Board[0, i] != 0))
                 {
                     return true;
                 }
             }
+
             // Check diagonals
-            if ((Board[0, 0] == Board[1, 1] && Board[1, 1] == Board[2, 2] && Board[0, 0] != 0) ||
-                (Board[2, 0] == Board[1, 1] && Board[1, 1] == Board[0, 2] && Board[2, 0] != 0))
+            if (Enumerable.Range(0, BoardSize).All(i => Board[i, i] == Board[0, 0] && Board[0, 0] != 0) ||
+                Enumerable.Range(0, BoardSize).All(i => Board[i, BoardSize - 1 - i] == Board[0, BoardSize - 1] && Board[0, BoardSize - 1] != 0))
             {
                 return true;
             }
+
             return false;
         }
 
         public bool IsDraw()
         {
-            for (int i = 0; i < 3; i++)
-            {
-                for (int j = 0; j < 3; j++)
-                {
-                    if (Board[i, j] == 0)
-                    {
-                        return false;
-                    }
-                }
-            }
-            return !CheckForWinner();
+            return Board.Cast<int>().All(cell => cell != 0);
         }
 
         public void AiMakeMove()
         {
-            // Збираємо всі порожні клітинки
+            var random = new Random();
             var emptyCells = new List<(int, int)>();
-            for (int i = 0; i < 3; i++)
+
+            for (int i = 0; i < BoardSize; i++)
             {
-                for (int j = 0; j < 3; j++)
+                for (int j = 0; j < BoardSize; j++)
                 {
                     if (Board[i, j] == 0)
                     {
@@ -78,25 +69,16 @@ namespace TicTacToeGame.Models
                 }
             }
 
-            // Вибираємо випадкову порожню клітинку для ходу AI
-            if (emptyCells.Count > 0)
+            if (emptyCells.Any())
             {
                 var (x, y) = emptyCells[random.Next(emptyCells.Count)];
-                Board[x, y] = 2; // AI завжди ставить "O"
-            }
-        }
-
-        public void ResetBoard()
-        {
-            for (int i = 0; i < 3; i++)
-            {
-                for (int j = 0; j < 3; j++)
-                {
-                    Board[i, j] = 0;
-                }
+                Board[x, y] = 2;
             }
         }
     }
 }
+
+
+
 
 

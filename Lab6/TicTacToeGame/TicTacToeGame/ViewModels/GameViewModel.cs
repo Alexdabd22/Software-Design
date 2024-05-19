@@ -5,10 +5,11 @@ namespace TicTacToeGame.ViewModels
 {
     public class GameViewModel : INotifyPropertyChanged
     {
-        private GameModel gameModel = new GameModel();
+        private GameModel gameModel;
         public event PropertyChangedEventHandler PropertyChanged;
         public bool PlayWithAI { get; set; }
         public int CurrentPlayer { get; private set; } = 1;
+        public int BoardSize { get; set; }
 
         private string username;
         public string Username
@@ -24,6 +25,12 @@ namespace TicTacToeGame.ViewModels
             }
         }
 
+        public GameViewModel(int boardSize)
+        {
+            BoardSize = boardSize;
+            gameModel = new GameModel(BoardSize);
+        }
+
         public int GetCellStatus(int row, int column)
         {
             return gameModel.Board[row, column];
@@ -31,6 +38,9 @@ namespace TicTacToeGame.ViewModels
 
         public void MakeMove(int row, int column)
         {
+            if (row < 0 || row >= BoardSize || column < 0 || column >= BoardSize)
+                return;
+
             if (gameModel.Board[row, column] == 0)
             {
                 gameModel.MakeMove(row, column, CurrentPlayer);
@@ -81,9 +91,13 @@ namespace TicTacToeGame.ViewModels
 
         public void ResetGame()
         {
-            gameModel = new GameModel();
+            gameModel = new GameModel(BoardSize);
             CurrentPlayer = 1;
             OnPropertyChanged("Reset");
         }
     }
 }
+
+
+
+
