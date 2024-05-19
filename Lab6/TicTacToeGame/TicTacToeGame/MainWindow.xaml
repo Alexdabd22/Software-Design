@@ -6,8 +6,14 @@
         xmlns:local="clr-namespace:TicTacToeGame"
         mc:Ignorable="d"
         Title="Tic Tac Toe Menu" Height="350" Width="525">
-    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-        <Button Content="Play With AI" Click="PlayWithAI_Click"/>
-        <Button Content="Play With Friend" Click="PlayWithFriend_Click" Height="23"/>
-    </StackPanel>
+    <Grid>
+        <StackPanel VerticalAlignment="Center">
+            <Button Content="Play With AI" Click="PlayWithAI_Click" Margin="10"/>
+            <Button Content="Play With Friend" Click="PlayWithFriend_Click" Margin="10"/>
+            <Button Content="Register" Click="RegisterButton_Click" Margin="10"/>
+            <Button Content="Login" Click="LoginButton_Click" Margin="10"/>
+            <TextBlock x:Name="WelcomeTextBlock" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="10"/>
+        </StackPanel>
+    </Grid>
 </Window>
+

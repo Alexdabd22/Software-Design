@@ -9,10 +9,10 @@ namespace TicTacToeGame
     {
         private GameViewModel gameViewModel;
 
-        public GameWindow(bool playWithAI)
+        public GameWindow(bool playWithAI, string username)
         {
             InitializeComponent();
-            gameViewModel = new GameViewModel { PlayWithAI = playWithAI };
+            gameViewModel = new GameViewModel { PlayWithAI = playWithAI, Username = username };
             DataContext = gameViewModel;
             InitializeGame();
         }
@@ -115,4 +115,3 @@ namespace TicTacToeGame
         }
     }
 }
-

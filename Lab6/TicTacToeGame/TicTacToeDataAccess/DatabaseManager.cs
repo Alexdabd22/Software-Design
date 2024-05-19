@@ -3,7 +3,6 @@ using System.Data;
 using System.Data.SQLite;
 using System.IO;
 
-
 namespace TicTacToeDataAccess
 {
     public class DatabaseManager
@@ -18,7 +17,7 @@ namespace TicTacToeDataAccess
 
         private void InitializeDatabase()
         {
-            if(!File.Exists(_databasePath))
+            if (!File.Exists(_databasePath))
             {
                 SQLiteConnection.CreateFile(_databasePath);
                 CreateTables();
@@ -31,7 +30,6 @@ namespace TicTacToeDataAccess
             {
                 connection.Open();
 
-                // таблиця players
                 var command = new SQLiteCommand(
                     "CREATE TABLE IF NOT EXISTS Players (" +
                     "PlayerID INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -41,7 +39,6 @@ namespace TicTacToeDataAccess
                     "CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP)", connection);
                 command.ExecuteNonQuery();
 
-                // таблиця games 
                 command.CommandText =
                     "CREATE TABLE IF NOT EXISTS Games (" +
                     "GameID INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -54,7 +51,7 @@ namespace TicTacToeDataAccess
                     "FOREIGN KEY (Player2ID) REFERENCES Players(PlayerID), " +
                     "FOREIGN KEY (WinnerID) REFERENCES Players(PlayerID))";
                 command.ExecuteNonQuery();
-                // таблиця moves
+
                 command.CommandText =
                     "CREATE TABLE IF NOT EXISTS Moves (" +
                     "MoveID INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -68,7 +65,7 @@ namespace TicTacToeDataAccess
             }
         }
 
-        public void InsertPlayers(string username,string email, string passwordHash)
+        public void InsertPlayer(string username, string email, string passwordHash)
         {
             using (var connection = new SQLiteConnection($"Data Source={_databasePath};Version=3;"))
             {
@@ -81,6 +78,33 @@ namespace TicTacToeDataAccess
                 command.ExecuteNonQuery();
             }
         }
+
+        public bool VerifyUser(string email, string passwordHash, out string username)
+        {
+            username = string.Empty;
+
+            using (var connection = new SQLiteConnection($"Data Source={_databasePath};Version=3;"))
+            {
+                connection.Open();
+                var command = new SQLiteCommand(
+                    "SELECT Username FROM Players WHERE Email = @Email AND PasswordHash = @PasswordHash", connection);
+                command.Parameters.AddWithValue("@Email", email);
+                command.Parameters.AddWithValue("@PasswordHash", passwordHash);
+
+                using (SQLiteDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        username = reader["Username"].ToString();
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+
 
         public DataTable ExecuteQuery(string sql)
         {
@@ -96,3 +120,6 @@ namespace TicTacToeDataAccess
         }
     }
 }
+
+
+
