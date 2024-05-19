@@ -65,5 +65,18 @@ namespace TicTacToeGame
                     return 3;
             }
         }
+
+        private void OpenGameHistoryWindow(object sender, RoutedEventArgs e)
+        {
+            GameHistoryWindow gameHistoryWindow = new GameHistoryWindow();
+            gameHistoryWindow.Show();
+        }
+
+        private void OpenLeaderboardWindow(object sender, RoutedEventArgs e)
+        {
+            LeaderboardWindow leaderboardWindow = new LeaderboardWindow();
+            leaderboardWindow.Show();
+        }
     }
 }
+

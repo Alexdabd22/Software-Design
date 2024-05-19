@@ -1,25 +1,33 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
 using TicTacToeGame.ViewModels;
+using TicTacToeDataAccess;
 
 namespace TicTacToeGame
 {
     public partial class GameWindow : Window
     {
         private GameViewModel gameViewModel;
+        private DispatcherTimer timer;
+        private DateTime startTime;
+        private DatabaseManager dbManager;
 
         public GameWindow(bool playWithAI, string username, int boardSize)
         {
             InitializeComponent();
             gameViewModel = new GameViewModel(boardSize) { PlayWithAI = playWithAI, Username = username };
             DataContext = gameViewModel;
+            dbManager = new DatabaseManager("TicTacToeGame.db");
             InitializeGame();
+            StartGameTimer();
         }
 
         private void InitializeGame()
         {
-            MainGrid.Children.Clear();
+            MainGrid.Children.Clear(); // Очищення перед додаванням нових кнопок
             MainGrid.RowDefinitions.Clear();
             MainGrid.ColumnDefinitions.Clear();
 
@@ -92,27 +100,62 @@ namespace TicTacToeGame
         {
             if (gameViewModel.CheckForWinner())
             {
+                StopGameTimer();
                 MessageBox.Show($"Player {gameViewModel.CurrentPlayer} wins!");
-                ResetGame();
+                SaveGameResult(gameViewModel.CurrentPlayer);
+                CloseGame();
             }
             else if (gameViewModel.IsDraw())
             {
+                StopGameTimer();
                 MessageBox.Show("The game is a draw!");
-                ResetGame();
+                SaveGameResult(0); // 0 означає нічия
+                CloseGame();
             }
         }
 
-        private void ResetGame()
+        private void SaveGameResult(int winner)
         {
-            foreach (Button btn in MainGrid.Children)
+            int player1ID = 0;
+            int player2ID = 0;
+
+            if (!string.IsNullOrEmpty(gameViewModel.Username))
             {
-                btn.Content = string.Empty;
+                player1ID = dbManager.GetPlayerID(gameViewModel.Username);
+                player2ID = gameViewModel.PlayWithAI ? 0 : 2; // Використання 2 як ID другого гравця у випадку гри проти іншого користувача.
             }
-            gameViewModel.ResetGame();
+
+            int winnerID = winner == 0 ? 0 : (winner == 1 ? player1ID : player2ID);
+
+            dbManager.InsertGameResult(player1ID, player2ID, winnerID, startTime, DateTime.Now);
+        }
+
+        private void StartGameTimer()
+        {
+            startTime = DateTime.Now;
+            timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Tick += Timer_Tick;
+            timer.Start();
+        }
+
+        private void StopGameTimer()
+        {
+            timer.Stop();
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            TimeSpan elapsed = DateTime.Now - startTime;
+            TimerTextBlock.Text = $"Time: {elapsed.Minutes:D2}:{elapsed.Seconds:D2}";
+        }
+
+        private void CloseGame()
+        {
+            MainWindow mainWindow = new MainWindow();
+            mainWindow.Show();
+            this.Close();
         }
     }
 }
-
-
-
 

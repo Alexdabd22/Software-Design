@@ -77,8 +77,3 @@ namespace TicTacToeGame.Models
         }
     }
 }
-
-
-
-
-
