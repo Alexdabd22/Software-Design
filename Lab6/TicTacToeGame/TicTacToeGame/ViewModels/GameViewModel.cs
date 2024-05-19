@@ -10,6 +10,20 @@ namespace TicTacToeGame.ViewModels
         public bool PlayWithAI { get; set; }
         public int CurrentPlayer { get; private set; } = 1;
 
+        private string username;
+        public string Username
+        {
+            get { return username; }
+            set
+            {
+                if (username != value)
+                {
+                    username = value;
+                    OnPropertyChanged("Username");
+                }
+            }
+        }
+
         public int GetCellStatus(int row, int column)
         {
             return gameModel.Board[row, column];
@@ -47,7 +61,7 @@ namespace TicTacToeGame.ViewModels
         {
             gameModel.AiMakeMove();
             OnPropertyChanged("AiMoved");
-            ChangePlayer(); // Ensure the player is changed after AI move
+            ChangePlayer();
         }
 
         public bool IsDraw()
@@ -73,7 +87,3 @@ namespace TicTacToeGame.ViewModels
         }
     }
 }
-
-
-
-
