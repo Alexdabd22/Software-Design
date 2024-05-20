@@ -6,6 +6,9 @@ using System.Windows.Threading;
 using TicTacToeGame.ViewModels;
 using TicTacToeDataAccess;
 using System.Windows.Input;
+using System.ComponentModel;
+using TicTacToeGame.Commands;
+using System.Collections.Generic;
 
 namespace TicTacToeGame
 {
@@ -24,10 +27,31 @@ namespace TicTacToeGame
             InitializeComponent();
             gameViewModel = new GameViewModel(boardSize) { PlayWithAI = playWithAI, Username = username };
             DataContext = gameViewModel;
+            gameViewModel.PropertyChanged += GameViewModel_PropertyChanged;
             dbManager = new DatabaseManager("TicTacToeGame.db");
             InitializeGame();
             StartGameTimer();
             this.PreviewKeyDown += Window_PreviewKeyDown;
+        }
+
+        private void GameViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "BoardUpdated")
+            {
+                UpdateUiForBoard();
+            }
+            else if (e.PropertyName == "Winner" || e.PropertyName == "Draw")
+            {
+                StopGameTimer();
+                string message = e.PropertyName == "Winner" ? $"Player {gameViewModel.CurrentPlayer} wins!" : "The game is a draw!";
+                MessageBox.Show(message);
+                SaveGameResult(e.PropertyName == "Winner" ? gameViewModel.CurrentPlayer : 0);
+                CloseGame();
+            }
+            else if (e.PropertyName == "AiMoved")
+            {
+                UpdateUiForBoard();
+            }
         }
 
         private void InitializeGame()
@@ -69,7 +93,6 @@ namespace TicTacToeGame
             {
                 button.Content = gameViewModel.CurrentPlayer == 1 ? "X" : "O";
                 gameViewModel.MakeMove(Grid.GetRow(button), Grid.GetColumn(button));
-                CheckGameState();
             }
 
             if (gameViewModel.PlayWithAI && gameViewModel.CurrentPlayer == 2)
@@ -77,13 +100,11 @@ namespace TicTacToeGame
                 Dispatcher.InvokeAsync(() =>
                 {
                     gameViewModel.PerformAiMove();
-                    UpdateUiForAiMove();
-                    CheckGameState();
                 });
             }
         }
 
-        private void UpdateUiForAiMove()
+        private void UpdateUiForBoard()
         {
             for (int i = 0; i < gameViewModel.BoardSize; i++)
             {
@@ -93,29 +114,12 @@ namespace TicTacToeGame
                         .Cast<Button>()
                         .FirstOrDefault(b => Grid.GetRow(b) == i && Grid.GetColumn(b) == j);
 
-                    if (button != null && gameViewModel.GetCellStatus(i, j) == 2)
+                    if (button != null)
                     {
-                        button.Content = "O";
+                        int cellStatus = gameViewModel.GetCellStatus(i, j);
+                        button.Content = cellStatus == 1 ? "X" : cellStatus == 2 ? "O" : string.Empty;
                     }
                 }
-            }
-        }
-
-        private void CheckGameState()
-        {
-            if (gameViewModel.CheckForWinner())
-            {
-                StopGameTimer();
-                MessageBox.Show($"Player {gameViewModel.CurrentPlayer} wins!");
-                SaveGameResult(gameViewModel.CurrentPlayer);
-                CloseGame();
-            }
-            else if (gameViewModel.IsDraw())
-            {
-                StopGameTimer();
-                MessageBox.Show("The game is a draw!");
-                SaveGameResult(0); // 0 означає нічия
-                CloseGame();
             }
         }
 
@@ -123,10 +127,13 @@ namespace TicTacToeGame
         {
             if (!isPaused)
             {
-                timer.Stop();
-                pauseStartTime = DateTime.Now;
-                isPaused = true;
-                MessageBox.Show("Game is paused. Press Enter to resume.");
+                var pauseCommand = new PauseGameCommand(timer, () =>
+                {
+                    pauseStartTime = DateTime.Now;
+                    isPaused = true;
+                    MessageBox.Show("Game is paused. Press Enter to resume.");
+                });
+                pauseCommand.Execute();
             }
         }
 
@@ -134,10 +141,13 @@ namespace TicTacToeGame
         {
             if (isPaused)
             {
-                totalPausedTime += DateTime.Now - pauseStartTime;
-                timer.Start();
-                isPaused = false;
-                this.Focus(); // Знову встановлюємо фокус на вікні гри
+                var resumeCommand = new ResumeGameCommand(timer, () =>
+                {
+                    totalPausedTime += DateTime.Now - pauseStartTime;
+                    isPaused = false;
+                    this.Focus();
+                });
+                resumeCommand.Execute();
             }
         }
 
@@ -174,14 +184,16 @@ namespace TicTacToeGame
             timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(1);
             timer.Tick += Timer_Tick;
+            var startTimerCommand = new StartGameTimerCommand(timer);
+            startTimerCommand.Execute();
             gameStartTime = DateTime.Now;
             totalPausedTime = TimeSpan.Zero;
-            timer.Start();
         }
 
         private void StopGameTimer()
         {
-            timer.Stop();
+            var stopTimerCommand = new StopTimerCommand(timer);
+            stopTimerCommand.Execute();
         }
 
         private void Timer_Tick(object sender, EventArgs e)
@@ -199,5 +211,18 @@ namespace TicTacToeGame
             mainWindow.Show();
             this.Close();
         }
+
+        private void UndoMove_Click(object sender, RoutedEventArgs e)
+        {
+            var undoMoveCommand = new UndoMoveCommand(gameViewModel);
+            undoMoveCommand.Execute();
+            UpdateUiForBoard();
+        }
     }
 }
+
+
+
+
+
+

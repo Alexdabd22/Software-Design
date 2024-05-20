@@ -3,6 +3,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Windows;
 using TicTacToeDataAccess;
+using TicTacToeGame.Commands;
 
 namespace TicTacToeGame
 {
@@ -12,17 +13,19 @@ namespace TicTacToeGame
 
         public RegistrationWindow()
         {
-            InitializeComponent();
+            InitializeComponent(); 
             _databaseManager = new DatabaseManager("TicTacToeGame.db");
         }
 
         private void RegisterButton_Click(object sender, RoutedEventArgs e)
         {
             string username = UsernameTextBox.Text;
-            string email = EmailTextBox.Text;
-            string passwordHash = ComputeSha256Hash(PasswordBox.Password);
+            string email = EmailTextBox.Text; 
+            string passwordHash = ComputeSha256Hash(PasswordBox.Password); 
 
-            _databaseManager.InsertPlayer(username, email, passwordHash);
+            var command = new RegisterPlayerCommand(_databaseManager, username, email, passwordHash);
+            command.Execute();
+
             MessageBox.Show("Registration successful!");
             this.Close();
         }
@@ -42,4 +45,5 @@ namespace TicTacToeGame
         }
     }
 }
+
 

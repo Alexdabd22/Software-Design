@@ -23,7 +23,6 @@ namespace TicTacToeGame
                 "(strftime('%s', EndDate) - strftime('%s', StartDate)) AS Duration " +
                 "FROM Games ORDER BY StartDate DESC");
 
-            // Create a new DataTable to store formatted data
             DataTable formattedData = data.Clone();
             formattedData.Columns["Duration"].DataType = typeof(string);
 

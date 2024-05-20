@@ -53,6 +53,11 @@ namespace TicTacToeGame.Models
             return Board.Cast<int>().All(cell => cell != 0);
         }
 
+        public void UndoMove(int x, int y, int previousValue)
+        {
+            Board[x, y] = previousValue;
+        }
+
         public void AiMakeMove()
         {
             var random = new Random();
@@ -77,3 +82,5 @@ namespace TicTacToeGame.Models
         }
     }
 }
+
+
