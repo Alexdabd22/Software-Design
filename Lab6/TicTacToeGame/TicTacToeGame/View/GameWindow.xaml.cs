@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Threading;
 using TicTacToeGame.ViewModels;
 using TicTacToeDataAccess;
+using System.Windows.Input;
 
 namespace TicTacToeGame
 {
@@ -12,8 +13,11 @@ namespace TicTacToeGame
     {
         private GameViewModel gameViewModel;
         private DispatcherTimer timer;
-        private DateTime startTime;
+        private DateTime gameStartTime;
+        private TimeSpan totalPausedTime;
+        private DateTime pauseStartTime;
         private DatabaseManager dbManager;
+        private bool isPaused = false;
 
         public GameWindow(bool playWithAI, string username, int boardSize)
         {
@@ -23,11 +27,12 @@ namespace TicTacToeGame
             dbManager = new DatabaseManager("TicTacToeGame.db");
             InitializeGame();
             StartGameTimer();
+            this.PreviewKeyDown += Window_PreviewKeyDown;
         }
 
         private void InitializeGame()
         {
-            MainGrid.Children.Clear(); // Очищення перед додаванням нових кнопок
+            MainGrid.Children.Clear();
             MainGrid.RowDefinitions.Clear();
             MainGrid.ColumnDefinitions.Clear();
 
@@ -114,6 +119,40 @@ namespace TicTacToeGame
             }
         }
 
+        private void PauseGame()
+        {
+            if (!isPaused)
+            {
+                timer.Stop();
+                pauseStartTime = DateTime.Now;
+                isPaused = true;
+                MessageBox.Show("Game is paused. Press Enter to resume.");
+            }
+        }
+
+        private void ResumeGame()
+        {
+            if (isPaused)
+            {
+                totalPausedTime += DateTime.Now - pauseStartTime;
+                timer.Start();
+                isPaused = false;
+                this.Focus(); // Знову встановлюємо фокус на вікні гри
+            }
+        }
+
+        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape && !isPaused)
+            {
+                PauseGame();
+            }
+            else if (e.Key == Key.Enter && isPaused)
+            {
+                ResumeGame();
+            }
+        }
+
         private void SaveGameResult(int winner)
         {
             int player1ID = 0;
@@ -122,20 +161,21 @@ namespace TicTacToeGame
             if (!string.IsNullOrEmpty(gameViewModel.Username))
             {
                 player1ID = dbManager.GetPlayerID(gameViewModel.Username);
-                player2ID = gameViewModel.PlayWithAI ? 0 : 2; 
+                player2ID = gameViewModel.PlayWithAI ? 0 : 2;
             }
 
             int winnerID = winner == 0 ? 0 : (winner == 1 ? player1ID : player2ID);
 
-            dbManager.InsertGameResult(player1ID, player2ID, winnerID, startTime, DateTime.Now);
+            dbManager.InsertGameResult(player1ID, player2ID, winnerID, gameStartTime, DateTime.Now);
         }
 
         private void StartGameTimer()
         {
-            startTime = DateTime.Now;
             timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(1);
             timer.Tick += Timer_Tick;
+            gameStartTime = DateTime.Now;
+            totalPausedTime = TimeSpan.Zero;
             timer.Start();
         }
 
@@ -146,8 +186,11 @@ namespace TicTacToeGame
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            TimeSpan elapsed = DateTime.Now - startTime;
-            TimerTextBlock.Text = $"Time: {elapsed.Minutes:D2}:{elapsed.Seconds:D2}";
+            if (!isPaused)
+            {
+                var timeSinceStart = DateTime.Now - gameStartTime - totalPausedTime;
+                TimerTextBlock.Text = $"Time: {timeSinceStart.Minutes:D2}:{timeSinceStart.Seconds:D2}";
+            }
         }
 
         private void CloseGame()
@@ -158,4 +201,3 @@ namespace TicTacToeGame
         }
     }
 }
-

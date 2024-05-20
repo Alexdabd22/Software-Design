@@ -14,8 +14,7 @@
                     <GridViewColumn Header="Player 1 ID" DisplayMemberBinding="{Binding Player1ID}" Width="100"/>
                     <GridViewColumn Header="Player 2 ID" DisplayMemberBinding="{Binding Player2ID}" Width="100"/>
                     <GridViewColumn Header="Winner ID" DisplayMemberBinding="{Binding WinnerID}" Width="100"/>
-                    <GridViewColumn Header="Game Date" DisplayMemberBinding="{Binding StartDate}" Width="150"/>
-                    <GridViewColumn Header="Duration" DisplayMemberBinding="{Binding Duration}" Width="150"/>
+                    <GridViewColumn Header="Duration" DisplayMemberBinding="{Binding Duration}" Width="100"/>
                 </GridView>
             </ListView.View>
         </ListView>
