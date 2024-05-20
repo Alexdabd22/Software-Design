@@ -9,8 +9,11 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <TextBlock x:Name="TimerTextBlock" FontSize="16" HorizontalAlignment="Center" Margin="10"/>
         <Grid x:Name="MainGrid" Grid.Row="1"/>
+        <Button Content="Undo Move" Click="UndoMove_Click" Grid.Row="2" HorizontalAlignment="Center" Margin="10"/>
     </Grid>
 </Window>
+

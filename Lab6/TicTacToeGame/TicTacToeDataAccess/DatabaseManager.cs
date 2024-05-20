@@ -187,6 +187,15 @@ namespace TicTacToeDataAccess
                 return dt;
             }
         }
+        public void DeletePlayer(string username)
+        {
+            using (var connection = new SQLiteConnection($"Data Source={_databasePath};Version=3;"))
+            {
+                connection.Open();
+                var command = new SQLiteCommand("DELETE FROM Players WHERE Username = @Username", connection);
+                command.Parameters.AddWithValue("@Username", username);
+                command.ExecuteNonQuery();
+            }
+        }
     }
 }
-

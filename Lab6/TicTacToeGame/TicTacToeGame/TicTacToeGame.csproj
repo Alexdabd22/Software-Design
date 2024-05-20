@@ -74,23 +74,23 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="GameHistoryWindow.xaml">
+    <Page Include="View\GameHistoryWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="LeaderboardWindow.xaml">
+    <Page Include="View\LeaderboardWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="LoginWindow.xaml">
+    <Page Include="View\LoginWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\RegistrationWindow.xaml">
+    <Page Include="RegistrationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\GameWindow.xaml">
+    <Page Include="GameWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -102,19 +102,27 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="GameHistoryWindow.xaml.cs">
+    <Compile Include="Commands\ICommand.cs" />
+    <Compile Include="Commands\MakeMoveCommand.cs" />
+    <Compile Include="Commands\PauseGameCommand.cs" />
+    <Compile Include="Commands\RegisterPlayerCommand.cs" />
+    <Compile Include="Commands\ResumeGameCommand.cs" />
+    <Compile Include="Commands\StartTimerCommand.cs" />
+    <Compile Include="Commands\StopTimerCommand.cs" />
+    <Compile Include="Commands\UndoMoveCommand.cs" />
+    <Compile Include="View\GameHistoryWindow.xaml.cs">
       <DependentUpon>GameHistoryWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="LeaderboardWindow.xaml.cs">
+    <Compile Include="View\LeaderboardWindow.xaml.cs">
       <DependentUpon>LeaderboardWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="LoginWindow.xaml.cs">
+    <Compile Include="View\LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\RegistrationWindow.xaml.cs">
+    <Compile Include="RegistrationWindow.xaml.cs">
       <DependentUpon>RegistrationWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\GameWindow.xaml.cs">
+    <Compile Include="GameWindow.xaml.cs">
       <DependentUpon>GameWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\GameModel.cs" />

@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using TicTacToeGame.Commands;
 using TicTacToeGame.Models;
 
 namespace TicTacToeGame.ViewModels
@@ -25,10 +27,13 @@ namespace TicTacToeGame.ViewModels
             }
         }
 
+        private readonly Stack<ICommand> _commandHistory;
+
         public GameViewModel(int boardSize)
         {
             BoardSize = boardSize;
             gameModel = new GameModel(BoardSize);
+            _commandHistory = new Stack<ICommand>();
         }
 
         public int GetCellStatus(int row, int column)
@@ -38,26 +43,31 @@ namespace TicTacToeGame.ViewModels
 
         public void MakeMove(int row, int column)
         {
-            if (row < 0 || row >= BoardSize || column < 0 || column >= BoardSize)
-                return;
+            var command = new MakeMoveCommand(this, row, column, CurrentPlayer);
+            command.Execute();
+            _commandHistory.Push(command);
+            CheckGameState();
+        }
 
-            if (gameModel.Board[row, column] == 0)
+        public void MakeMoveInternal(int row, int column, int player)
+        {
+            gameModel.MakeMove(row, column, player);
+            OnPropertyChanged("BoardUpdated");
+        }
+
+        public void UndoMove(int row, int column, int previousValue)
+        {
+            gameModel.UndoMove(row, column, previousValue);
+            OnPropertyChanged("BoardUpdated");
+        }
+
+        public void Undo()
+        {
+            if (_commandHistory.Count > 0)
             {
-                gameModel.MakeMove(row, column, CurrentPlayer);
-                OnPropertyChanged("BoardUpdated");
-
-                if (gameModel.CheckForWinner())
-                {
-                    OnPropertyChanged("Winner");
-                }
-                else if (gameModel.IsDraw())
-                {
-                    OnPropertyChanged("Draw");
-                }
-                else
-                {
-                    ChangePlayer();
-                }
+                var command = _commandHistory.Pop();
+                command.Undo();
+                CheckGameState();
             }
         }
 
@@ -72,6 +82,7 @@ namespace TicTacToeGame.ViewModels
             gameModel.AiMakeMove();
             OnPropertyChanged("AiMoved");
             ChangePlayer();
+            CheckGameState();
         }
 
         public bool IsDraw()
@@ -84,6 +95,22 @@ namespace TicTacToeGame.ViewModels
             return gameModel.CheckForWinner();
         }
 
+        private void CheckGameState()
+        {
+            if (CheckForWinner())
+            {
+                OnPropertyChanged("Winner");
+            }
+            else if (IsDraw())
+            {
+                OnPropertyChanged("Draw");
+            }
+            else
+            {
+                ChangePlayer();
+            }
+        }
+
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -93,13 +120,11 @@ namespace TicTacToeGame.ViewModels
         {
             gameModel = new GameModel(BoardSize);
             CurrentPlayer = 1;
+            _commandHistory.Clear();
             OnPropertyChanged("Reset");
         }
     }
 }
-
-
-
 
 
 
