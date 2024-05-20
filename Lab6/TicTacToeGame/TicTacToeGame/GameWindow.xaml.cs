@@ -8,7 +8,6 @@ using TicTacToeDataAccess;
 using System.Windows.Input;
 using System.ComponentModel;
 using TicTacToeGame.Commands;
-using System.Collections.Generic;
 
 namespace TicTacToeGame
 {
@@ -123,6 +122,17 @@ namespace TicTacToeGame
             }
         }
 
+        private void ExecuteCommand(TicTacToeGame.Commands.ICommand command)
+        {
+            command.Execute();
+        }
+
+        private void ExecuteCommandWithAction(TicTacToeGame.Commands.ICommand command, Action action)
+        {
+            command.Execute();
+            action?.Invoke();
+        }
+
         private void PauseGame()
         {
             if (!isPaused)
@@ -133,7 +143,7 @@ namespace TicTacToeGame
                     isPaused = true;
                     MessageBox.Show("Game is paused. Press Enter to resume.");
                 });
-                pauseCommand.Execute();
+                ExecuteCommandWithAction(pauseCommand, null);
             }
         }
 
@@ -147,7 +157,7 @@ namespace TicTacToeGame
                     isPaused = false;
                     this.Focus();
                 });
-                resumeCommand.Execute();
+                ExecuteCommandWithAction(resumeCommand, null);
             }
         }
 
@@ -185,7 +195,7 @@ namespace TicTacToeGame
             timer.Interval = TimeSpan.FromSeconds(1);
             timer.Tick += Timer_Tick;
             var startTimerCommand = new StartGameTimerCommand(timer);
-            startTimerCommand.Execute();
+            ExecuteCommand(startTimerCommand);
             gameStartTime = DateTime.Now;
             totalPausedTime = TimeSpan.Zero;
         }
@@ -193,7 +203,7 @@ namespace TicTacToeGame
         private void StopGameTimer()
         {
             var stopTimerCommand = new StopTimerCommand(timer);
-            stopTimerCommand.Execute();
+            ExecuteCommand(stopTimerCommand);
         }
 
         private void Timer_Tick(object sender, EventArgs e)
@@ -215,14 +225,8 @@ namespace TicTacToeGame
         private void UndoMove_Click(object sender, RoutedEventArgs e)
         {
             var undoMoveCommand = new UndoMoveCommand(gameViewModel);
-            undoMoveCommand.Execute();
+            ExecuteCommand(undoMoveCommand);
             UpdateUiForBoard();
         }
     }
 }
-
-
-
-
-
-
