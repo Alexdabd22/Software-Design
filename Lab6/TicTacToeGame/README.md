@@ -208,3 +208,95 @@
         }
     }
     ```
+    ## Refactoring Techniques
+1. **Extract Class**
+    - **Файли**: [PlayerManager.cs](https://github.com/Alexdabd22/Software-Design/blob/main/Lab6/TicTacToeGame/TicTacToeGame/DataAccess/PlayerManager.cs), [DatabaseManager.cs](https://github.com/Alexdabd22/Software-Design/blob/main/Lab6/TicTacToeGame/TicTacToeGame/DataAccess/DatabaseManager.cs)
+    - **Пояснення**: Виділення логіки роботи з базою даних в окремий клас для полегшення коду і підвищення його підтримуваності.
+    ```csharp
+    public class PlayerManager
+    {
+        private readonly string _databasePath;
+
+        public PlayerManager(string databasePath)
+        {
+            _databasePath = databasePath;
+        }
+
+        public void InsertPlayer(Player player)
+        {
+            using (var connection = new SQLiteConnection($"Data Source={_databasePath};Version=3;"))
+            {
+                connection.Open();
+                var command = new SQLiteCommand(
+                    "INSERT INTO Players (Username, Email, PasswordHash) VALUES (@Username, @Email, @PasswordHash)", connection);
+                command.Parameters.AddWithValue("@Username", player.Username);
+                command.Parameters.AddWithValue("@Email", player.Email);
+                command.Parameters.AddWithValue("@PasswordHash", player.PasswordHash);
+                command.ExecuteNonQuery();
+            }
+        }
+
+        // Інші методи управління гравцями...
+    }
+    ```
+
+2. **Extract Method**
+    - **Файли**: [GameWindow.xaml.cs](https://github.com/Alexdabd22/Software-Design/blob/main/Lab6/TicTacToeGame/TicTacToeGame/View/GameWindow.xaml.cs)
+    - **Пояснення**: Виділення логіки в окремі методи для підвищення читабельності і повторного використання коду.
+    ```csharp
+    private void InitializeGame()
+    {
+        MainGrid.Children.Clear();
+        MainGrid.RowDefinitions.Clear();
+        MainGrid.ColumnDefinitions.Clear();
+
+        for (int i = 0; i < gameViewModel.BoardSize; i++)
+        {
+            MainGrid.RowDefinitions.Add(new RowDefinition());
+            MainGrid.ColumnDefinitions.Add(new ColumnDefinition());
+        }
+
+        for (int i = 0; i < gameViewModel.BoardSize; i++)
+        {
+            for (int j = 0; j < gameViewModel.BoardSize; j++)
+            {
+                Button button = new Button
+                {
+                    FontSize = 32,
+                    Content = string.Empty
+                };
+                button.Click += Button_Click;
+                Grid.SetRow(button, i);
+                Grid.SetColumn(button, j);
+                MainGrid.Children.Add(button);
+            }
+        }
+    }
+    ```
+
+3. **Introduce Parameter Object**
+    - **Файли**: [Player.cs](https://github.com/Alexdabd22/Software-Design/blob/main/Lab6/TicTacToeGame/TicTacToeModels/Player.cs)
+    - **Пояснення**: Використання класу Player для передачі параметрів замість використання декількох параметрів у методах.
+    ```csharp
+    public class Player
+    {
+        public int PlayerID { get; set; }
+        public string Username { get; set; }
+        public string Email { get; set; }
+        public string PasswordHash { get; set; }
+        public DateTime CreatedAt { get; set; }
+
+        public Player(int playerID, string username, string email, string passwordHash, DateTime createdAt)
+        {
+            PlayerID = playerID;
+            Username = username;
+            Email = email;
+            PasswordHash = passwordHash;
+            CreatedAt = createdAt;
+        }
+    }
+    ```
+
+## Використання Git
+- Кожна фіча розробляється в окремій гілці.
+- Використовуються пулл-ріквести для мерджу гілок.
