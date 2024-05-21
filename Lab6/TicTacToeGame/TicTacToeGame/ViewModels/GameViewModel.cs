@@ -3,11 +3,13 @@ using System.ComponentModel;
 using TicTacToeGame.Commands;
 using TicTacToeGame.Models;
 using TicTacToeGame.Observer;
+using TicTacToeGame.Strategy;
 
 namespace TicTacToeGame.ViewModels
 {
     public class GameViewModel : INotifyPropertyChanged, ISubject
     {
+        private IGameStrategy _gameStrategy;
         private GameModel gameModel;
         public event PropertyChangedEventHandler PropertyChanged;
         public bool PlayWithAI { get; set; }
@@ -37,6 +39,11 @@ namespace TicTacToeGame.ViewModels
             BoardSize = boardSize;
             gameModel = new GameModel(BoardSize);
             _commandHistory = new Stack<ICommand>();
+        }
+
+        public void SetGameStrategy(IGameStrategy gameStrategy)
+        {
+            _gameStrategy = gameStrategy;
         }
 
         public int GetCellStatus(int row, int column)
@@ -103,23 +110,10 @@ namespace TicTacToeGame.ViewModels
 
         private void CheckGameState()
         {
-            if (CheckForWinner())
-            {
-                OnPropertyChanged("Winner");
-                Notify("Winner");
-            }
-            else if (IsDraw())
-            {
-                OnPropertyChanged("Draw");
-                Notify("Draw");
-            }
-            else
-            {
-                ChangePlayer();
-            }
+            _gameStrategy.CheckGameState(this);
         }
 
-        protected void OnPropertyChanged(string propertyName)
+        public void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
@@ -152,4 +146,7 @@ namespace TicTacToeGame.ViewModels
         }
     }
 }
+
+
+
 

@@ -8,6 +8,7 @@ using TicTacToeDataAccess;
 using System.Windows.Input;
 using TicTacToeGame.Commands;
 using TicTacToeGame.Observer;
+using TicTacToeGame.Strategy;
 
 namespace TicTacToeGame
 {
@@ -28,14 +29,27 @@ namespace TicTacToeGame
             DataContext = gameViewModel;
             gameViewModel.Attach(this);
             dbManager = new DatabaseManager("TicTacToeGame.db");
+
+            // Set the strategy
+            if (playWithAI)
+            {
+                gameViewModel.SetGameStrategy(new PlayerVsAIStrategy());
+            }
+            else
+            {
+                gameViewModel.SetGameStrategy(new PlayerVsPlayerStrategy());
+            }
+
             InitializeGame();
             StartGameTimer();
             this.PreviewKeyDown += Window_PreviewKeyDown;
         }
+
         public void SetPlayerUsername(string username)
         {
             gameViewModel.Username = username;
         }
+
         public void Update(string propertyName)
         {
             if (propertyName == "BoardUpdated")
@@ -187,8 +201,6 @@ namespace TicTacToeGame
             dbManager.InsertGameResult(player1ID, player2ID, winnerID, gameStartTime, DateTime.Now);
         }
 
-
-
         private void StartGameTimer()
         {
             timer = new DispatcherTimer();
@@ -230,6 +242,3 @@ namespace TicTacToeGame
         }
     }
 }
-
-
-

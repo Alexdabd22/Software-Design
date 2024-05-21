@@ -112,6 +112,9 @@
     <Compile Include="Commands\UndoMoveCommand.cs" />
     <Compile Include="Observer\IObserver.cs" />
     <Compile Include="Observer\ISubject.cs" />
+    <Compile Include="Strategy\IGameStrategy.cs" />
+    <Compile Include="Strategy\PlayerVsAIStrategy.cs" />
+    <Compile Include="Strategy\PlayerVsPlayerStrategy.cs" />
     <Compile Include="View\GameHistoryWindow.xaml.cs">
       <DependentUpon>GameHistoryWindow.xaml</DependentUpon>
     </Compile>
