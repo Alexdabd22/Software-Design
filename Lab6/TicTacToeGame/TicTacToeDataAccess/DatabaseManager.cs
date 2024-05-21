@@ -96,68 +96,6 @@ namespace TicTacToeDataAccess
             }
         }
 
-        public void InsertPlayer(string username, string email, string passwordHash)
-        {
-            using (var connection = new SQLiteConnection($"Data Source={_databasePath};Version=3;"))
-            {
-                connection.Open();
-                var command = new SQLiteCommand(
-                    "INSERT INTO Players (Username, Email, PasswordHash) VALUES (@Username, @Email, @PasswordHash)", connection);
-                command.Parameters.AddWithValue("@Username", username);
-                command.Parameters.AddWithValue("@Email", email);
-                command.Parameters.AddWithValue("@PasswordHash", passwordHash);
-                command.ExecuteNonQuery();
-            }
-        }
-
-        public bool VerifyUser(string email, string passwordHash, out string username)
-        {
-            username = string.Empty;
-
-            using (var connection = new SQLiteConnection($"Data Source={_databasePath};Version=3;"))
-            {
-                connection.Open();
-                var command = new SQLiteCommand(
-                    "SELECT Username FROM Players WHERE Email = @Email AND PasswordHash = @PasswordHash", connection);
-                command.Parameters.AddWithValue("@Email", email);
-                command.Parameters.AddWithValue("@PasswordHash", passwordHash);
-
-                using (SQLiteDataReader reader = command.ExecuteReader())
-                {
-                    if (reader.Read())
-                    {
-                        username = reader["Username"].ToString();
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        public int GetPlayerID(string username)
-        {
-            using (var connection = new SQLiteConnection($"Data Source={_databasePath};Version=3;"))
-            {
-                connection.Open();
-                var command = new SQLiteCommand(
-                    "SELECT PlayerID FROM Players WHERE Username = @Username", connection);
-                command.Parameters.AddWithValue("@Username", username);
-
-                using (SQLiteDataReader reader = command.ExecuteReader())
-                {
-                    if (reader.Read())
-                    {
-                        return Convert.ToInt32(reader["PlayerID"]);
-                    }
-                    else
-                    {
-                        throw new Exception("Player not found");
-                    }
-                }
-            }
-        }
-
         public void InsertGameResult(int player1ID, int player2ID, int winnerID, DateTime startDate, DateTime endDate)
         {
             using (var connection = new SQLiteConnection($"Data Source={_databasePath};Version=3;"))
@@ -185,16 +123,6 @@ namespace TicTacToeDataAccess
                 DataTable dt = new DataTable();
                 adapter.Fill(dt);
                 return dt;
-            }
-        }
-        public void DeletePlayer(string username)
-        {
-            using (var connection = new SQLiteConnection($"Data Source={_databasePath};Version=3;"))
-            {
-                connection.Open();
-                var command = new SQLiteCommand("DELETE FROM Players WHERE Username = @Username", connection);
-                command.Parameters.AddWithValue("@Username", username);
-                command.ExecuteNonQuery();
             }
         }
     }

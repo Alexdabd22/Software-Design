@@ -2,19 +2,20 @@
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows;
-using TicTacToeDataAccess;
+using TicTacToeGame.DataAccess;
+using TicTacToeGame.Models;
 
 namespace TicTacToeGame
 {
     public partial class LoginWindow : Window
     {
-        private DatabaseManager _databaseManager;
+        private PlayerManager _playerManager;
         public string LoggedInUsername { get; private set; }
 
         public LoginWindow()
         {
             InitializeComponent();
-            _databaseManager = new DatabaseManager("TicTacToeGame.db");
+            _playerManager = new PlayerManager("TicTacToeGame.db");
         }
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
@@ -22,9 +23,10 @@ namespace TicTacToeGame
             string email = EmailTextBox.Text;
             string passwordHash = ComputeSha256Hash(PasswordBox.Password);
 
-            if (_databaseManager.VerifyUser(email, passwordHash, out string username))
+            var player = _playerManager.GetPlayerByEmailAndPassword(email, passwordHash);
+            if (player != null)
             {
-                LoggedInUsername = username;
+                LoggedInUsername = player.Username;
                 MessageBox.Show("Login successful!");
                 DialogResult = true;
                 Close();
@@ -50,5 +52,4 @@ namespace TicTacToeGame
         }
     }
 }
-
 

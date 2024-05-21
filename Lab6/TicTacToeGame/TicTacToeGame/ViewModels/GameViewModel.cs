@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using TicTacToeGame.Commands;
 using TicTacToeGame.Models;
 using TicTacToeGame.Observer;
 using TicTacToeGame.Strategy;
+using TicTacToeGame.Utils;
 
 namespace TicTacToeGame.ViewModels
 {
@@ -30,15 +30,15 @@ namespace TicTacToeGame.ViewModels
             }
         }
 
-        private readonly Stack<ICommand> _commandHistory;
-
-        private List<IObserver> observers = new List<IObserver>();
+        private readonly CommandManager _commandManager;
+        private readonly Subject _subject;
 
         public GameViewModel(int boardSize)
         {
             BoardSize = boardSize;
             gameModel = new GameModel(BoardSize);
-            _commandHistory = new Stack<ICommand>();
+            _commandManager = new CommandManager();
+            _subject = new Subject();
         }
 
         public void SetGameStrategy(IGameStrategy gameStrategy)
@@ -54,8 +54,7 @@ namespace TicTacToeGame.ViewModels
         public void MakeMove(int row, int column)
         {
             var command = new MakeMoveCommand(this, row, column, CurrentPlayer);
-            command.Execute();
-            _commandHistory.Push(command);
+            _commandManager.ExecuteCommand(command);
             CheckGameState();
         }
 
@@ -75,12 +74,8 @@ namespace TicTacToeGame.ViewModels
 
         public void Undo()
         {
-            if (_commandHistory.Count > 0)
-            {
-                var command = _commandHistory.Pop();
-                command.Undo();
-                CheckGameState();
-            }
+            _commandManager.Undo();
+            CheckGameState();
         }
 
         public void ChangePlayer()
@@ -122,30 +117,30 @@ namespace TicTacToeGame.ViewModels
         {
             gameModel = new GameModel(BoardSize);
             CurrentPlayer = 1;
-            _commandHistory.Clear();
+            _commandManager.ClearHistory();
             OnPropertyChanged("Reset");
             Notify("Reset");
         }
 
         public void Attach(IObserver observer)
         {
-            observers.Add(observer);
+            _subject.Attach(observer);
         }
 
         public void Detach(IObserver observer)
         {
-            observers.Remove(observer);
+            _subject.Detach(observer);
         }
 
         public void Notify(string propertyName)
         {
-            foreach (var observer in observers)
-            {
-                observer.Update(propertyName);
-            }
+            _subject.Notify(propertyName);
         }
     }
 }
+
+
+
 
 
 

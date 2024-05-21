@@ -9,10 +9,10 @@ namespace TicTacToeGame
     {
         private DatabaseManager _databaseManager;
 
-        public GameHistoryWindow()
+        public GameHistoryWindow(DatabaseManager databaseManager)
         {
             InitializeComponent();
-            _databaseManager = new DatabaseManager("TicTacToeGame.db");
+            _databaseManager = databaseManager;
             LoadGameHistory();
         }
 
@@ -53,3 +53,4 @@ namespace TicTacToeGame
         }
     }
 }
+

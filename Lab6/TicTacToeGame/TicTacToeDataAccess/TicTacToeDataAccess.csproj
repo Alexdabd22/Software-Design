@@ -61,11 +61,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DatabaseManager.cs" />
+    <Compile Include="PlayerManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TicTacToeModels\TicTacToeModels.csproj">
+      <Project>{d5f7bb30-54da-4cce-894f-3f4153767e44}</Project>
+      <Name>TicTacToeModels</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

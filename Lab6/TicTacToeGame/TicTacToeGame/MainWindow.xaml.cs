@@ -3,6 +3,7 @@ using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using TicTacToeDataAccess;
+using TicTacToeGame.DataAccess;
 
 namespace TicTacToeGame
 {
@@ -10,6 +11,7 @@ namespace TicTacToeGame
     {
         private const string DatabaseFileName = "TicTacToeGame.db";
         private DatabaseManager dbManager;
+        private PlayerManager playerManager;
         private string loggedInUsername;
 
         public MainWindow()
@@ -17,6 +19,7 @@ namespace TicTacToeGame
             InitializeComponent();
             string dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, DatabaseFileName);
             dbManager = new DatabaseManager(dbPath);
+            playerManager = new PlayerManager(dbPath);
             BoardSizeComboBox.SelectedIndex = 0; // Встановлення стандартного розміру 3x3
         }
 
@@ -39,7 +42,7 @@ namespace TicTacToeGame
         private void PlayWithAI_Click(object sender, RoutedEventArgs e)
         {
             int boardSize = GetSelectedBoardSize();
-            GameWindow gameWindow = new GameWindow(true, loggedInUsername, boardSize);
+            GameWindow gameWindow = new GameWindow(true, loggedInUsername, boardSize, dbManager, playerManager);
             if (!string.IsNullOrEmpty(loggedInUsername))
             {
                 gameWindow.SetPlayerUsername(loggedInUsername);
@@ -51,7 +54,7 @@ namespace TicTacToeGame
         private void PlayWithFriend_Click(object sender, RoutedEventArgs e)
         {
             int boardSize = GetSelectedBoardSize();
-            GameWindow gameWindow = new GameWindow(false, loggedInUsername, boardSize);
+            GameWindow gameWindow = new GameWindow(false, loggedInUsername, boardSize, dbManager, playerManager);
             if (!string.IsNullOrEmpty(loggedInUsername))
             {
                 gameWindow.SetPlayerUsername(loggedInUsername);
@@ -76,15 +79,14 @@ namespace TicTacToeGame
 
         private void OpenGameHistoryWindow(object sender, RoutedEventArgs e)
         {
-            GameHistoryWindow gameHistoryWindow = new GameHistoryWindow();
+            GameHistoryWindow gameHistoryWindow = new GameHistoryWindow(dbManager);
             gameHistoryWindow.Show();
         }
 
         private void OpenLeaderboardWindow(object sender, RoutedEventArgs e)
         {
-            LeaderboardWindow leaderboardWindow = new LeaderboardWindow();
+            LeaderboardWindow leaderboardWindow = new LeaderboardWindow(dbManager);
             leaderboardWindow.Show();
         }
     }
 }
-

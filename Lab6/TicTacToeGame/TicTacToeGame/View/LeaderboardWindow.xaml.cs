@@ -8,10 +8,10 @@ namespace TicTacToeGame
     {
         private DatabaseManager _databaseManager;
 
-        public LeaderboardWindow()
+        public LeaderboardWindow(DatabaseManager databaseManager)
         {
             InitializeComponent();
-            _databaseManager = new DatabaseManager("TicTacToeGame.db");
+            _databaseManager = databaseManager;
             LoadLeaderboard();
         }
 

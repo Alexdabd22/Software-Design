@@ -4,11 +4,13 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
 using TicTacToeGame.ViewModels;
-using TicTacToeDataAccess;
+using TicTacToeGame.DataAccess;
 using System.Windows.Input;
 using TicTacToeGame.Commands;
 using TicTacToeGame.Observer;
 using TicTacToeGame.Strategy;
+using TicTacToeModels;
+using TicTacToeDataAccess;
 
 namespace TicTacToeGame
 {
@@ -20,15 +22,17 @@ namespace TicTacToeGame
         private TimeSpan totalPausedTime;
         private DateTime pauseStartTime;
         private DatabaseManager dbManager;
+        private PlayerManager playerManager;
         private bool isPaused = false;
 
-        public GameWindow(bool playWithAI, string username, int boardSize)
+        public GameWindow(bool playWithAI, string username, int boardSize, DatabaseManager dbManager, PlayerManager playerManager)
         {
             InitializeComponent();
+            this.dbManager = dbManager;
+            this.playerManager = playerManager;
             gameViewModel = new GameViewModel(boardSize) { PlayWithAI = playWithAI, Username = username };
             DataContext = gameViewModel;
             gameViewModel.Attach(this);
-            dbManager = new DatabaseManager("TicTacToeGame.db");
 
             // Set the strategy
             if (playWithAI)
@@ -192,7 +196,7 @@ namespace TicTacToeGame
 
             if (!string.IsNullOrEmpty(gameViewModel.Username))
             {
-                player1ID = dbManager.GetPlayerID(gameViewModel.Username);
+                player1ID = playerManager.GetPlayerID(gameViewModel.Username);
                 player2ID = gameViewModel.PlayWithAI ? 2 : 2;
             }
 
