@@ -6,12 +6,12 @@ using System.Windows.Threading;
 using TicTacToeGame.ViewModels;
 using TicTacToeDataAccess;
 using System.Windows.Input;
-using System.ComponentModel;
 using TicTacToeGame.Commands;
+using TicTacToeGame.Observer;
 
 namespace TicTacToeGame
 {
-    public partial class GameWindow : Window
+    public partial class GameWindow : Window, IObserver
     {
         private GameViewModel gameViewModel;
         private DispatcherTimer timer;
@@ -26,28 +26,37 @@ namespace TicTacToeGame
             InitializeComponent();
             gameViewModel = new GameViewModel(boardSize) { PlayWithAI = playWithAI, Username = username };
             DataContext = gameViewModel;
-            gameViewModel.PropertyChanged += GameViewModel_PropertyChanged;
+            gameViewModel.Attach(this);
             dbManager = new DatabaseManager("TicTacToeGame.db");
             InitializeGame();
             StartGameTimer();
             this.PreviewKeyDown += Window_PreviewKeyDown;
         }
-
-        private void GameViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        public void SetPlayerUsername(string username)
         {
-            if (e.PropertyName == "BoardUpdated")
+            gameViewModel.Username = username;
+        }
+        public void Update(string propertyName)
+        {
+            if (propertyName == "BoardUpdated")
             {
                 UpdateUiForBoard();
             }
-            else if (e.PropertyName == "Winner" || e.PropertyName == "Draw")
+            else if (propertyName == "Winner")
             {
                 StopGameTimer();
-                string message = e.PropertyName == "Winner" ? $"Player {gameViewModel.CurrentPlayer} wins!" : "The game is a draw!";
-                MessageBox.Show(message);
-                SaveGameResult(e.PropertyName == "Winner" ? gameViewModel.CurrentPlayer : 0);
+                MessageBox.Show($"Player {gameViewModel.CurrentPlayer} wins!");
+                SaveGameResult(gameViewModel.CurrentPlayer);
                 CloseGame();
             }
-            else if (e.PropertyName == "AiMoved")
+            else if (propertyName == "Draw")
+            {
+                StopGameTimer();
+                MessageBox.Show("The game is a draw!");
+                SaveGameResult(0); // 0 означає нічия
+                CloseGame();
+            }
+            else if (propertyName == "AiMoved")
             {
                 UpdateUiForBoard();
             }
@@ -122,17 +131,6 @@ namespace TicTacToeGame
             }
         }
 
-        private void ExecuteCommand(TicTacToeGame.Commands.ICommand command)
-        {
-            command.Execute();
-        }
-
-        private void ExecuteCommandWithAction(TicTacToeGame.Commands.ICommand command, Action action)
-        {
-            command.Execute();
-            action?.Invoke();
-        }
-
         private void PauseGame()
         {
             if (!isPaused)
@@ -143,7 +141,7 @@ namespace TicTacToeGame
                     isPaused = true;
                     MessageBox.Show("Game is paused. Press Enter to resume.");
                 });
-                ExecuteCommandWithAction(pauseCommand, null);
+                pauseCommand.Execute();
             }
         }
 
@@ -157,7 +155,7 @@ namespace TicTacToeGame
                     isPaused = false;
                     this.Focus();
                 });
-                ExecuteCommandWithAction(resumeCommand, null);
+                resumeCommand.Execute();
             }
         }
 
@@ -181,7 +179,7 @@ namespace TicTacToeGame
             if (!string.IsNullOrEmpty(gameViewModel.Username))
             {
                 player1ID = dbManager.GetPlayerID(gameViewModel.Username);
-                player2ID = gameViewModel.PlayWithAI ? 0 : 2;
+                player2ID = gameViewModel.PlayWithAI ? 2 : 2;
             }
 
             int winnerID = winner == 0 ? 0 : (winner == 1 ? player1ID : player2ID);
@@ -189,13 +187,15 @@ namespace TicTacToeGame
             dbManager.InsertGameResult(player1ID, player2ID, winnerID, gameStartTime, DateTime.Now);
         }
 
+
+
         private void StartGameTimer()
         {
             timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(1);
             timer.Tick += Timer_Tick;
             var startTimerCommand = new StartGameTimerCommand(timer);
-            ExecuteCommand(startTimerCommand);
+            startTimerCommand.Execute();
             gameStartTime = DateTime.Now;
             totalPausedTime = TimeSpan.Zero;
         }
@@ -203,7 +203,7 @@ namespace TicTacToeGame
         private void StopGameTimer()
         {
             var stopTimerCommand = new StopTimerCommand(timer);
-            ExecuteCommand(stopTimerCommand);
+            stopTimerCommand.Execute();
         }
 
         private void Timer_Tick(object sender, EventArgs e)
@@ -225,8 +225,11 @@ namespace TicTacToeGame
         private void UndoMove_Click(object sender, RoutedEventArgs e)
         {
             var undoMoveCommand = new UndoMoveCommand(gameViewModel);
-            ExecuteCommand(undoMoveCommand);
+            undoMoveCommand.Execute();
             UpdateUiForBoard();
         }
     }
 }
+
+
+

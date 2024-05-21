@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Windows;
-using TicTacToeDataAccess;
 using System.IO;
+using System.Windows;
 using System.Windows.Controls;
+using TicTacToeDataAccess;
 
 namespace TicTacToeGame
 {
@@ -40,6 +40,10 @@ namespace TicTacToeGame
         {
             int boardSize = GetSelectedBoardSize();
             GameWindow gameWindow = new GameWindow(true, loggedInUsername, boardSize);
+            if (!string.IsNullOrEmpty(loggedInUsername))
+            {
+                gameWindow.SetPlayerUsername(loggedInUsername);
+            }
             gameWindow.Show();
             this.Close();
         }
@@ -48,6 +52,10 @@ namespace TicTacToeGame
         {
             int boardSize = GetSelectedBoardSize();
             GameWindow gameWindow = new GameWindow(false, loggedInUsername, boardSize);
+            if (!string.IsNullOrEmpty(loggedInUsername))
+            {
+                gameWindow.SetPlayerUsername(loggedInUsername);
+            }
             gameWindow.Show();
             this.Close();
         }
@@ -79,3 +87,4 @@ namespace TicTacToeGame
         }
     }
 }
+
