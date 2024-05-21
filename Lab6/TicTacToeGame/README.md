@@ -81,4 +81,130 @@
         this.playerManager = playerManager;
     }
     ```
+## Design Patterns
+1. **Command Pattern**
+    - **Файли**: [MakeMoveCommand.cs](Commands/MakeMoveCommand.cs), [PauseGameCommand.cs](Commands/PauseGameCommand.cs), [RegisterPlayerCommand.cs](Commands/RegisterPlayerCommand.cs)
+    - **Пояснення**: Використовується для інкапсуляції запиту як об'єкта, дозволяючи параметризувати клієнтів з різними запитами, чергами або журналами запитів.
+    ```csharp
+    public class MakeMoveCommand : ICommand
+    {
+        private readonly GameViewModel _gameViewModel;
+        private readonly int _row;
+        private readonly int _column;
+        private readonly int _player;
 
+        public MakeMoveCommand(GameViewModel gameViewModel, int row, int column, int player)
+        {
+            _gameViewModel = gameViewModel;
+            _row = row;
+            _column = column;
+            _player = player;
+        }
+
+        public void Execute()
+        {
+            _gameViewModel.MakeMoveInternal(_row, _column, _player);
+        }
+
+        public void Undo()
+        {
+            _gameViewModel.UndoMove(_row, _column, _previousValue);
+        }
+    }
+    ```
+
+2. **Observer Pattern**
+    - **Файли**: [IObserver.cs](Observer/IObserver.cs), [ISubject.cs](Observer/ISubject.cs), [Subject.cs](Observer/Subject.cs)
+    - **Пояснення**: Використовується для інформування об'єктів-спостерігачів про зміну стану суб'єкта, дозволяючи динамічно додавати/видаляти спостерігачів.
+    ```csharp
+    public interface IObserver
+    {
+        void Update(string propertyName);
+    }
+
+    public interface ISubject
+    {
+        void Attach(IObserver observer);
+        void Detach(IObserver observer);
+        void Notify(string propertyName);
+    }
+
+    public class Subject : ISubject
+    {
+        private List<IObserver> observers = new List<IObserver>();
+
+        public void Attach(IObserver observer)
+        {
+            observers.Add(observer);
+        }
+
+        public void Detach(IObserver observer)
+        {
+            observers.Remove(observer);
+        }
+
+        public void Notify(string propertyName)
+        {
+            foreach (var observer in observers)
+            {
+                observer.Update(propertyName);
+            }
+        }
+    }
+    ```
+
+3. **Strategy Pattern**
+    - **Файли**: [IGameStrategy.cs](Strategy/IGameStrategy.cs), [PlayerVsAIStrategy.cs](Strategy/PlayerVsAIStrategy.cs), [PlayerVsPlayerStrategy.cs](Strategy/PlayerVsPlayerStrategy.cs)
+    - **Пояснення**: Використовується для визначення сімейства алгоритмів, інкапсуляції кожного з них і забезпечення їх взаємозамінності.
+    ```csharp
+    public interface IGameStrategy
+    {
+        void CheckGameState(GameViewModel gameViewModel);
+    }
+
+    public class PlayerVsAIStrategy : IGameStrategy
+    {
+        public void CheckGameState(GameViewModel gameViewModel)
+        {
+            if (gameViewModel.CheckForWinner())
+            {
+                gameViewModel.OnPropertyChanged("Winner");
+                gameViewModel.Notify("Winner");
+            }
+            else if (gameViewModel.IsDraw())
+            {
+                gameViewModel.OnPropertyChanged("Draw");
+                gameViewModel.Notify("Draw");
+            }
+            else
+            {
+                gameViewModel.ChangePlayer();
+                if (gameViewModel.CurrentPlayer == 2)
+                {
+                    gameViewModel.PerformAiMove();
+                }
+            }
+        }
+    }
+
+    public class PlayerVsPlayerStrategy : IGameStrategy
+    {
+        public void CheckGameState(GameViewModel gameViewModel)
+        {
+            if (gameViewModel.CheckForWinner())
+            {
+                gameViewModel.OnPropertyChanged("Winner");
+                gameViewModel.Notify("Winner");
+            }
+            else if (gameViewModel.IsDraw())
+            {
+                gameViewModel.OnPropertyChanged("Draw");
+                gameViewModel.Notify("Draw");
+            }
+            else
+            {
+                gameViewModel.ChangePlayer();
+            }
+        }
+    }
+    ```
