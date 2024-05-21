@@ -2,10 +2,11 @@
 using System.ComponentModel;
 using TicTacToeGame.Commands;
 using TicTacToeGame.Models;
+using TicTacToeGame.Observer;
 
 namespace TicTacToeGame.ViewModels
 {
-    public class GameViewModel : INotifyPropertyChanged
+    public class GameViewModel : INotifyPropertyChanged, ISubject
     {
         private GameModel gameModel;
         public event PropertyChangedEventHandler PropertyChanged;
@@ -28,6 +29,8 @@ namespace TicTacToeGame.ViewModels
         }
 
         private readonly Stack<ICommand> _commandHistory;
+
+        private List<IObserver> observers = new List<IObserver>();
 
         public GameViewModel(int boardSize)
         {
@@ -53,12 +56,14 @@ namespace TicTacToeGame.ViewModels
         {
             gameModel.MakeMove(row, column, player);
             OnPropertyChanged("BoardUpdated");
+            Notify("BoardUpdated");
         }
 
         public void UndoMove(int row, int column, int previousValue)
         {
             gameModel.UndoMove(row, column, previousValue);
             OnPropertyChanged("BoardUpdated");
+            Notify("BoardUpdated");
         }
 
         public void Undo()
@@ -75,13 +80,14 @@ namespace TicTacToeGame.ViewModels
         {
             CurrentPlayer = CurrentPlayer == 1 ? 2 : 1;
             OnPropertyChanged("PlayerChanged");
+            Notify("PlayerChanged");
         }
 
         public void PerformAiMove()
         {
             gameModel.AiMakeMove();
             OnPropertyChanged("AiMoved");
-            ChangePlayer();
+            Notify("AiMoved");
             CheckGameState();
         }
 
@@ -100,10 +106,12 @@ namespace TicTacToeGame.ViewModels
             if (CheckForWinner())
             {
                 OnPropertyChanged("Winner");
+                Notify("Winner");
             }
             else if (IsDraw())
             {
                 OnPropertyChanged("Draw");
+                Notify("Draw");
             }
             else
             {
@@ -122,10 +130,26 @@ namespace TicTacToeGame.ViewModels
             CurrentPlayer = 1;
             _commandHistory.Clear();
             OnPropertyChanged("Reset");
+            Notify("Reset");
+        }
+
+        public void Attach(IObserver observer)
+        {
+            observers.Add(observer);
+        }
+
+        public void Detach(IObserver observer)
+        {
+            observers.Remove(observer);
+        }
+
+        public void Notify(string propertyName)
+        {
+            foreach (var observer in observers)
+            {
+                observer.Update(propertyName);
+            }
         }
     }
 }
-
-
-
 

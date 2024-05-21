@@ -77,7 +77,7 @@ namespace TicTacToeGame.Models
             if (emptyCells.Any())
             {
                 var (x, y) = emptyCells[random.Next(emptyCells.Count)];
-                Board[x, y] = 2;
+                Board[x, y] = 2; // AI завжди використовує ID 2
             }
         }
     }
