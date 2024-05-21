@@ -210,7 +210,7 @@
     ```
     ## Refactoring Techniques
 1. **Extract Class**
-    - **Файли**: [PlayerManager.cs](https://github.com/Alexdabd22/Software-Design/blob/main/Lab6/TicTacToeGame/TicTacToeGame/DataAccess/PlayerManager.cs), [DatabaseManager.cs](https://github.com/Alexdabd22/Software-Design/blob/main/Lab6/TicTacToeGame/TicTacToeGame/DataAccess/DatabaseManager.cs)
+    - **Файли**: [PlayerManager.cs](https://github.com/Alexdabd22/Software-Design/blob/main/Lab6/TicTacToeGame/TicTacToeDataAccess/PlayerManager.cs), [DatabaseManager.cs](https://github.com/Alexdabd22/Software-Design/blob/main/Lab6/TicTacToeGame/TicTacToeDataAccess/DatabaseManager.cs)
     - **Пояснення**: Виділення логіки роботи з базою даних в окремий клас для полегшення коду і підвищення його підтримуваності.
     ```csharp
     public class PlayerManager
@@ -241,7 +241,7 @@
     ```
 
 2. **Extract Method**
-    - **Файли**: [GameWindow.xaml.cs](https://github.com/Alexdabd22/Software-Design/blob/main/Lab6/TicTacToeGame/TicTacToeGame/View/GameWindow.xaml.cs)
+    - **Файли**: [GameWindow.xaml.cs](https://github.com/Alexdabd22/Software-Design/blob/main/Lab6/TicTacToeGame/TicTacToeGame/GameWindow.xaml.cs)
     - **Пояснення**: Виділення логіки в окремі методи для підвищення читабельності і повторного використання коду.
     ```csharp
     private void InitializeGame()
@@ -275,7 +275,7 @@
     ```
 
 3. **Introduce Parameter Object**
-    - **Файли**: [Player.cs](https://github.com/Alexdabd22/Software-Design/blob/main/Lab6/TicTacToeGame/TicTacToeModels/Player.cs)
+    - **Файли**: [Player.cs](https://github.com/Alexdabd22/Software-Design/blob/main/Lab6/TicTacToeGame/TicTacToeModels/Models/PlayerModel.cs)
     - **Пояснення**: Використання класу Player для передачі параметрів замість використання декількох параметрів у методах.
     ```csharp
     public class Player
