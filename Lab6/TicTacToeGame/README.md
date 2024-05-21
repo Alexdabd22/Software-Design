@@ -83,7 +83,7 @@
     ```
 ## Design Patterns
 1. **Command Pattern**
-    - **Файли**: [MakeMoveCommand.cs](Commands/MakeMoveCommand.cs), [PauseGameCommand.cs](Commands/PauseGameCommand.cs), [RegisterPlayerCommand.cs](Commands/RegisterPlayerCommand.cs)
+    - **Файли**: [MakeMoveCommand.cs](https://github.com/Alexdabd22/Software-Design/blob/main/Lab6/TicTacToeGame/TicTacToeGame/Commands/MakeMoveCommand.cs), [PauseGameCommand.cs](https://github.com/Alexdabd22/Software-Design/blob/main/Lab6/TicTacToeGame/TicTacToeGame/Commands/PauseGameCommand.cs), [RegisterPlayerCommand.cs](https://github.com/Alexdabd22/Software-Design/blob/main/Lab6/TicTacToeGame/TicTacToeGame/Commands/RegisterPlayerCommand.cs)
     - **Пояснення**: Використовується для інкапсуляції запиту як об'єкта, дозволяючи параметризувати клієнтів з різними запитами, чергами або журналами запитів.
     ```csharp
     public class MakeMoveCommand : ICommand
@@ -114,7 +114,7 @@
     ```
 
 2. **Observer Pattern**
-    - **Файли**: [IObserver.cs](Observer/IObserver.cs), [ISubject.cs](Observer/ISubject.cs), [Subject.cs](Observer/Subject.cs)
+    - **Файли**: [IObserver.cs](https://github.com/Alexdabd22/Software-Design/blob/main/Lab6/TicTacToeGame/TicTacToeGame/Observer/IObserver.cs), [ISubject.cs](https://github.com/Alexdabd22/Software-Design/blob/main/Lab6/TicTacToeGame/TicTacToeGame/Observer/ISubject.cs), [Subject.cs](https://github.com/Alexdabd22/Software-Design/blob/main/Lab6/TicTacToeGame/TicTacToeGame/Observer/Subject.cs)
     - **Пояснення**: Використовується для інформування об'єктів-спостерігачів про зміну стану суб'єкта, дозволяючи динамічно додавати/видаляти спостерігачів.
     ```csharp
     public interface IObserver
@@ -154,7 +154,7 @@
     ```
 
 3. **Strategy Pattern**
-    - **Файли**: [IGameStrategy.cs](Strategy/IGameStrategy.cs), [PlayerVsAIStrategy.cs](Strategy/PlayerVsAIStrategy.cs), [PlayerVsPlayerStrategy.cs](Strategy/PlayerVsPlayerStrategy.cs)
+    - **Файли**: [IGameStrategy.cs](https://github.com/Alexdabd22/Software-Design/blob/main/Lab6/TicTacToeGame/TicTacToeGame/Strategy/IGameStrategy.cs), [PlayerVsAIStrategy.cs](https://github.com/Alexdabd22/Software-Design/blob/main/Lab6/TicTacToeGame/TicTacToeGame/Strategy/PlayerVsAIStrategy.cs), [PlayerVsPlayerStrategy.cs](https://github.com/Alexdabd22/Software-Design/blob/main/Lab6/TicTacToeGame/TicTacToeGame/Strategy/PlayerVsPlayerStrategy.cs)
     - **Пояснення**: Використовується для визначення сімейства алгоритмів, інкапсуляції кожного з них і забезпечення їх взаємозамінності.
     ```csharp
     public interface IGameStrategy
