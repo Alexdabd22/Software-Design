@@ -20,7 +20,7 @@ namespace TicTacToeGame
             string dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, DatabaseFileName);
             dbManager = new DatabaseManager(dbPath);
             playerManager = new PlayerManager(dbPath);
-            BoardSizeComboBox.SelectedIndex = 0; // Встановлення стандартного розміру 3x3
+            BoardSizeComboBox.SelectedIndex = 0;
         }
 
         private void RegisterButton_Click(object sender, RoutedEventArgs e)

@@ -83,28 +83,31 @@ namespace TicTacToeGame
             MainGrid.Children.Clear();
             MainGrid.RowDefinitions.Clear();
             MainGrid.ColumnDefinitions.Clear();
-
             for (int i = 0; i < gameViewModel.BoardSize; i++)
             {
                 MainGrid.RowDefinitions.Add(new RowDefinition());
                 MainGrid.ColumnDefinitions.Add(new ColumnDefinition());
             }
-
             for (int i = 0; i < gameViewModel.BoardSize; i++)
             {
                 for (int j = 0; j < gameViewModel.BoardSize; j++)
                 {
-                    Button button = new Button
-                    {
-                        FontSize = 32,
-                        Content = string.Empty
-                    };
-                    button.Click += Button_Click;
-                    Grid.SetRow(button, i);
-                    Grid.SetColumn(button, j);
+                    var button = CreateGameButton(i, j);
                     MainGrid.Children.Add(button);
                 }
             }
+        }
+        private Button CreateGameButton(int row, int column)
+        {
+            var button = new Button
+            {
+                FontSize = 32,
+                Content = string.Empty
+            };
+            button.Click += Button_Click;
+            Grid.SetRow(button, row);
+            Grid.SetColumn(button, column);
+            return button;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

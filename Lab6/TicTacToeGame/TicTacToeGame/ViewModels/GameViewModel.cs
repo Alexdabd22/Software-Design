@@ -45,26 +45,22 @@ namespace TicTacToeGame.ViewModels
         {
             _gameStrategy = gameStrategy;
         }
-
         public int GetCellStatus(int row, int column)
         {
             return gameModel.Board[row, column];
         }
-
         public void MakeMove(int row, int column)
         {
             var command = new MakeMoveCommand(this, row, column, CurrentPlayer);
             _commandManager.ExecuteCommand(command);
             CheckGameState();
         }
-
         public void MakeMoveInternal(int row, int column, int player)
         {
             gameModel.MakeMove(row, column, player);
             OnPropertyChanged("BoardUpdated");
             Notify("BoardUpdated");
         }
-
         public void UndoMove(int row, int column, int previousValue)
         {
             gameModel.UndoMove(row, column, previousValue);
