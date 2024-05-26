@@ -34,7 +34,6 @@ namespace TicTacToeGame
             DataContext = gameViewModel;
             gameViewModel.Attach(this);
 
-            // Set the strategy
             if (playWithAI)
             {
                 gameViewModel.SetGameStrategy(new PlayerVsAIStrategy());
@@ -56,28 +55,27 @@ namespace TicTacToeGame
 
         public void Update(string propertyName)
         {
-            if (propertyName == "BoardUpdated")
+            switch (propertyName)
             {
-                UpdateUiForBoard();
+                case "BoardUpdated":
+                case "AiMoved":
+                    UpdateUiForBoard();
+                    break;
+                case "Winner":
+                    HandleGameEnd($"Player {gameViewModel.CurrentPlayer} wins!", gameViewModel.CurrentPlayer);
+                    break;
+                case "Draw":
+                    HandleGameEnd("The game is a draw!", 0);
+                    break;
             }
-            else if (propertyName == "Winner")
-            {
-                StopGameTimer();
-                MessageBox.Show($"Player {gameViewModel.CurrentPlayer} wins!");
-                SaveGameResult(gameViewModel.CurrentPlayer);
-                CloseGame();
-            }
-            else if (propertyName == "Draw")
-            {
-                StopGameTimer();
-                MessageBox.Show("The game is a draw!");
-                SaveGameResult(0); // 0 означає нічия
-                CloseGame();
-            }
-            else if (propertyName == "AiMoved")
-            {
-                UpdateUiForBoard();
-            }
+        }
+
+        private void HandleGameEnd(string message, int winner)
+        {
+            StopGameTimer();
+            MessageBox.Show(message);
+            SaveGameResult(winner);
+            CloseGame();
         }
 
         private void InitializeGame()
@@ -85,34 +83,36 @@ namespace TicTacToeGame
             MainGrid.Children.Clear();
             MainGrid.RowDefinitions.Clear();
             MainGrid.ColumnDefinitions.Clear();
-
             for (int i = 0; i < gameViewModel.BoardSize; i++)
             {
                 MainGrid.RowDefinitions.Add(new RowDefinition());
                 MainGrid.ColumnDefinitions.Add(new ColumnDefinition());
             }
-
             for (int i = 0; i < gameViewModel.BoardSize; i++)
             {
                 for (int j = 0; j < gameViewModel.BoardSize; j++)
                 {
-                    Button button = new Button
-                    {
-                        FontSize = 32,
-                        Content = string.Empty
-                    };
-                    button.Click += Button_Click;
-                    Grid.SetRow(button, i);
-                    Grid.SetColumn(button, j);
+                    var button = CreateGameButton(i, j);
                     MainGrid.Children.Add(button);
                 }
             }
         }
+        private Button CreateGameButton(int row, int column)
+        {
+            var button = new Button
+            {
+                FontSize = 32,
+                Content = string.Empty
+            };
+            button.Click += Button_Click;
+            Grid.SetRow(button, row);
+            Grid.SetColumn(button, column);
+            return button;
+        }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            var button = sender as Button;
-            if (button == null || button.Content.ToString() != string.Empty)
+            if (!(sender is Button button) || button.Content.ToString() != string.Empty)
                 return;
 
             if (!gameViewModel.PlayWithAI || gameViewModel.CurrentPlayer == 1)
@@ -120,16 +120,11 @@ namespace TicTacToeGame
                 button.Content = gameViewModel.CurrentPlayer == 1 ? "X" : "O";
                 gameViewModel.MakeMove(Grid.GetRow(button), Grid.GetColumn(button));
             }
-
-            if (gameViewModel.PlayWithAI && gameViewModel.CurrentPlayer == 2)
+            else if (gameViewModel.CurrentPlayer == 2)
             {
-                Dispatcher.InvokeAsync(() =>
-                {
-                    gameViewModel.PerformAiMove();
-                });
+                Dispatcher.InvokeAsync(() => gameViewModel.PerformAiMove());
             }
         }
-
         private void UpdateUiForBoard()
         {
             for (int i = 0; i < gameViewModel.BoardSize; i++)
