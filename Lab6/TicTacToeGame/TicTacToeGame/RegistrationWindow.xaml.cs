@@ -15,7 +15,7 @@ namespace TicTacToeGame
         public RegistrationWindow()
         {
             InitializeComponent();
-            _playerManager = new PlayerManager("TicTacToeGame.db");
+            _playerManager = new PlayerManager();
         }
 
         private void RegisterButton_Click(object sender, RoutedEventArgs e)

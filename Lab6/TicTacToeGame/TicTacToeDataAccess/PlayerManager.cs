@@ -8,11 +8,9 @@ namespace TicTacToeGame.DataAccess
 {
     public class PlayerManager
     {
-        private readonly SQLiteConnection _connection;
-
         public PlayerManager()
         {
-            _connection = DatabaseConnection.Instance.GetConnection();
+            
         }
 
         public void InsertPlayer(Player player)

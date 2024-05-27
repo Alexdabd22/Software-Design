@@ -7,11 +7,9 @@ namespace TicTacToeDataAccess
 {
     public class DatabaseManager
     {
-        private readonly SQLiteConnection _connection;
         public DatabaseManager()
         {
             InitializeDatabase();
-            _connection = DatabaseConnection.Instance.GetConnection();
         }
 
         private void InitializeDatabase()
@@ -22,7 +20,7 @@ namespace TicTacToeDataAccess
 
         private void CreateTables()
         {
-            using (var command = new SQLiteCommand(_connection))
+            using (var command = new SQLiteCommand(DatabaseConnection.Instance.GetConnection()))
             {
                 command.CommandText =
                     "CREATE TABLE IF NOT EXISTS Players (" +
@@ -61,7 +59,7 @@ namespace TicTacToeDataAccess
 
         private void UpdateTables()
         {
-            using (var command = new SQLiteCommand("PRAGMA table_info(Games)", _connection))
+            using (var command = new SQLiteCommand("PRAGMA table_info(Games)", DatabaseConnection.Instance.GetConnection()))
             {
                 using (var reader = command.ExecuteReader())
                 {
@@ -77,7 +75,7 @@ namespace TicTacToeDataAccess
 
                     if (!gameDateExists)
                     {
-                        using (var alterCommand = new SQLiteCommand("ALTER TABLE Games ADD COLUMN GameDate DATETIME DEFAULT CURRENT_TIMESTAMP", _connection))
+                        using (var alterCommand = new SQLiteCommand("ALTER TABLE Games ADD COLUMN GameDate DATETIME DEFAULT CURRENT_TIMESTAMP", DatabaseConnection.Instance.GetConnection()))
                         {
                             alterCommand.ExecuteNonQuery();
                         }
@@ -90,7 +88,7 @@ namespace TicTacToeDataAccess
         {
             using (var command = new SQLiteCommand(
                 "INSERT INTO Games (Player1ID, Player2ID, WinnerID, StartDate, EndDate) " +
-                "VALUES (@Player1ID, @Player2ID, @WinnerID, @StartDate, @EndDate)", _connection))
+                "VALUES (@Player1ID, @Player2ID, @WinnerID, @StartDate, @EndDate)", DatabaseConnection.Instance.GetConnection()))
             {
                 command.Parameters.AddWithValue("@Player1ID", player1ID);
                 command.Parameters.AddWithValue("@Player2ID", player2ID);
@@ -103,7 +101,7 @@ namespace TicTacToeDataAccess
 
         public DataTable ExecuteQuery(string sql)
         {
-            using (var command = new SQLiteCommand(sql, _connection))
+            using (var command = new SQLiteCommand(sql, DatabaseConnection.Instance.GetConnection()))
             {
                 using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(command))
                 {

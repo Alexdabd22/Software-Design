@@ -13,7 +13,7 @@ namespace TicTacToeDataAccess
 
         private DatabaseConnection()
         {
-            string databasePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "TicTacToeGame.db");
+            string databasePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "TicTacToeDatabase.sqlite");
             if (!File.Exists(databasePath))
             {
                 SQLiteConnection.CreateFile(databasePath);
@@ -40,8 +40,11 @@ namespace TicTacToeDataAccess
 
         public SQLiteConnection GetConnection()
         {
+            if (connection.State != System.Data.ConnectionState.Open)
+            {
+                connection.Open();
+            }
             return connection;
         }
     }
-
 }
