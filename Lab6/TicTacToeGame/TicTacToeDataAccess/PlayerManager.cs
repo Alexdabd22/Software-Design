@@ -1,26 +1,26 @@
 ﻿using System;
 using System.Data;
 using System.Data.SQLite;
+using TicTacToeDataAccess;
 using TicTacToeModels;
 
 namespace TicTacToeGame.DataAccess
 {
     public class PlayerManager
     {
-        private readonly string _databasePath;
+        private readonly SQLiteConnection _connection;
 
-        public PlayerManager(string databasePath)
+        public PlayerManager()
         {
-            _databasePath = databasePath;
+            _connection = DatabaseConnection.Instance.GetConnection();
         }
 
         public void InsertPlayer(Player player)
         {
-            using (var connection = new SQLiteConnection($"Data Source={_databasePath};Version=3;"))
+            using (var command = new SQLiteCommand(
+                "INSERT INTO Players (Username, Email, PasswordHash) VALUES (@Username, @Email, @PasswordHash)",
+                DatabaseConnection.Instance.GetConnection()))
             {
-                connection.Open();
-                var command = new SQLiteCommand(
-                    "INSERT INTO Players (Username, Email, PasswordHash) VALUES (@Username, @Email, @PasswordHash)", connection);
                 command.Parameters.AddWithValue("@Username", player.Username);
                 command.Parameters.AddWithValue("@Email", player.Email);
                 command.Parameters.AddWithValue("@PasswordHash", player.PasswordHash);
@@ -30,11 +30,10 @@ namespace TicTacToeGame.DataAccess
 
         public Player GetPlayerByEmailAndPassword(string email, string passwordHash)
         {
-            using (var connection = new SQLiteConnection($"Data Source={_databasePath};Version=3;"))
+            using (var command = new SQLiteCommand(
+                "SELECT * FROM Players WHERE Email = @Email AND PasswordHash = @PasswordHash",
+                DatabaseConnection.Instance.GetConnection()))
             {
-                connection.Open();
-                var command = new SQLiteCommand(
-                    "SELECT * FROM Players WHERE Email = @Email AND PasswordHash = @PasswordHash", connection);
                 command.Parameters.AddWithValue("@Email", email);
                 command.Parameters.AddWithValue("@PasswordHash", passwordHash);
 
@@ -58,11 +57,10 @@ namespace TicTacToeGame.DataAccess
 
         public int GetPlayerID(string username)
         {
-            using (var connection = new SQLiteConnection($"Data Source={_databasePath};Version=3;"))
+            using (var command = new SQLiteCommand(
+                "SELECT PlayerID FROM Players WHERE Username = @Username",
+                DatabaseConnection.Instance.GetConnection()))
             {
-                connection.Open();
-                var command = new SQLiteCommand(
-                    "SELECT PlayerID FROM Players WHERE Username = @Username", connection);
                 command.Parameters.AddWithValue("@Username", username);
 
                 using (SQLiteDataReader reader = command.ExecuteReader())
@@ -81,10 +79,10 @@ namespace TicTacToeGame.DataAccess
 
         public void DeletePlayer(string username)
         {
-            using (var connection = new SQLiteConnection($"Data Source={_databasePath};Version=3;"))
+            using (var command = new SQLiteCommand(
+                "DELETE FROM Players WHERE Username = @Username",
+                DatabaseConnection.Instance.GetConnection()))
             {
-                connection.Open();
-                var command = new SQLiteCommand("DELETE FROM Players WHERE Username = @Username", connection);
                 command.Parameters.AddWithValue("@Username", username);
                 command.ExecuteNonQuery();
             }

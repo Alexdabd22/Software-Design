@@ -9,7 +9,6 @@ namespace TicTacToeGame
 {
     public partial class MainWindow : Window
     {
-        private const string DatabaseFileName = "TicTacToeGame.db";
         private DatabaseManager dbManager;
         private PlayerManager playerManager;
         private string loggedInUsername;
@@ -17,9 +16,8 @@ namespace TicTacToeGame
         public MainWindow()
         {
             InitializeComponent();
-            string dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, DatabaseFileName);
-            dbManager = new DatabaseManager(dbPath);
-            playerManager = new PlayerManager(dbPath);
+            dbManager = new DatabaseManager();
+            playerManager = new PlayerManager();
             BoardSizeComboBox.SelectedIndex = 0;
         }
 
